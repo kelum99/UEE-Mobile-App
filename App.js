@@ -9,7 +9,7 @@ const App = () => {
   return (
     <NativeBaseProvider>
       <NavigationContainer>
-        <StatusBar animated backgroundColor="#fff" barStyle="dark-content" />
+        <StatusBar animated backgroundColor="#0096C7" barStyle="dark-content" />
         <MainNavigator />
       </NavigationContainer>
     </NativeBaseProvider>

@@ -6,7 +6,7 @@ const MainLayout = props => {
 };
 const Styles = StyleSheet.create({
   container: {
-    backgroundColor: '#fff',
+    backgroundColor: '#0096C7',
     flex: 1,
   },
 });

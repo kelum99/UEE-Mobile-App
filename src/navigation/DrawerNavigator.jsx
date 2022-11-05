@@ -11,7 +11,11 @@ const CustomDrawerContent = ({navigation}) => {
     <DrawerContentScrollView>
       <DrawerItem
         label="NewsFeed"
-        onPress={() => navigation.navigate('NewsFeed')}
+        onPress={() => navigation.navigate('ArticleStack')}
+      />
+      <DrawerItem
+        label="Resources"
+        onPress={() => navigation.navigate('ResourcesStack')}
       />
     </DrawerContentScrollView>
   );
@@ -25,6 +29,10 @@ const DrawerNavigator = () => {
       screenOptions={{
         drawerLabelStyle: {fontSize: 16},
         headerTitleAlign: 'center',
+        headerStyle: {backgroundColor: '#0096C7'},
+        headerShadowVisible: false,
+        headerTintColor: '#fff',
+        headerShown: false,
       }}
       drawerContent={props => {
         return <CustomDrawerContent {...props} />;
@@ -33,8 +41,14 @@ const DrawerNavigator = () => {
         component={ArticleNavigator}
         name="ArticleStack"
         options={{
-          headerShown: false,
           drawerLabel: 'NewsFeed',
+        }}
+      />
+      <Drawer.Screen
+        component={ArticleNavigator}
+        name="ResourcesStack"
+        options={{
+          drawerLabel: 'Resources',
         }}
       />
     </Drawer.Navigator>
