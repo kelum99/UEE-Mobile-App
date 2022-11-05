@@ -23,7 +23,7 @@ const Endangered = ({route}) => {
              alignItems: 'center',
              justifyContent: 'center',
            }}>
-           <Pressable onPress={() => navigation.navigate('Article')}>
+           <Pressable >
              <Box
                m={4}
                rounded="lg"
