@@ -5,6 +5,7 @@ import {
   DrawerItem,
 } from '@react-navigation/drawer';
 import ArticleNavigator from './ArticleNavigator';
+import EndangeredSpeciesNavigator from './EndangeredSpeciesNavigator';
 
 const CustomDrawerContent = ({navigation}) => {
   return (
@@ -16,6 +17,10 @@ const CustomDrawerContent = ({navigation}) => {
       <DrawerItem
         label="Resources"
         onPress={() => navigation.navigate('ResourcesStack')}
+      />
+      <DrawerItem
+         label="Endangered Species"
+         onPress={() => navigation.navigate('EndangeredStack')}
       />
     </DrawerContentScrollView>
   );
@@ -49,6 +54,13 @@ const DrawerNavigator = () => {
         name="ResourcesStack"
         options={{
           drawerLabel: 'Resources',
+        }}
+      />
+      <Drawer.Screen
+        component={EndangeredSpeciesNavigator}
+        name="EndangeredStack"
+        options={{
+        drawerLabel: 'Endangered Species',
         }}
       />
     </Drawer.Navigator>
