@@ -1,7 +1,7 @@
 import React from 'react';
-import {SafeAreaView, ScrollView, StyleSheet} from 'react-native';
+import { StyleSheet} from 'react-native';
 import MainLayout from '../../components/MainLayout';
-import {AspectRatio, Box, Heading, Image, Text, VStack, Button, Pressable} from 'native-base';
+import {AspectRatio, Box, Image, Button, Pressable} from 'native-base';
 
 const EndangeredSpecies = ({navigation}) => {
   return (
