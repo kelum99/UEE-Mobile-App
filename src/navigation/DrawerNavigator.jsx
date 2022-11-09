@@ -5,6 +5,7 @@ import {
   DrawerItem,
 } from '@react-navigation/drawer';
 import ArticleNavigator from './ArticleNavigator';
+import MyArticles from '../screens/Article/MyArticles';
 
 const CustomDrawerContent = ({navigation}) => {
   return (
@@ -16,6 +17,10 @@ const CustomDrawerContent = ({navigation}) => {
       <DrawerItem
         label="Resources"
         onPress={() => navigation.navigate('ResourcesStack')}
+      />
+      <DrawerItem
+        label="MyArticles"
+        onPress={() => navigation.navigate('MyArticles')}
       />
     </DrawerContentScrollView>
   );
