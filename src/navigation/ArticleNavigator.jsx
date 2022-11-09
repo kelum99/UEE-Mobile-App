@@ -29,7 +29,7 @@ const HeaderRight = ({navigation}) => {
       <IconButton
         _icon={{
           as: MaterialIcons,
-          name: 'add',
+          name: 'post-add',
           color: '#fff',
           size: 'lg',
         }}

@@ -24,8 +24,8 @@ const CustomDrawerContent = ({navigation}) => {
         onPress={() => navigation.navigate('MyArticles')}
       />
       <DrawerItem
-         label="Endangered Species"
-         onPress={() => navigation.navigate('EndangeredStack')}
+        label="Endangered Species"
+        onPress={() => navigation.navigate('EndangeredStack')}
       />
     </DrawerContentScrollView>
   );
@@ -65,7 +65,7 @@ const DrawerNavigator = () => {
         component={EndangeredSpeciesNavigator}
         name="EndangeredStack"
         options={{
-        drawerLabel: 'Endangered Species',
+          drawerLabel: 'Endangered Species',
         }}
       />
     </Drawer.Navigator>
