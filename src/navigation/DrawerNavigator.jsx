@@ -7,6 +7,7 @@ import {
 import ArticleNavigator from './ArticleNavigator';
 import MyArticles from '../screens/Article/MyArticles';
 import EndangeredSpeciesNavigator from './EndangeredSpeciesNavigator';
+import AdminNavigator from './AdminNavigator';
 
 const CustomDrawerContent = ({navigation}) => {
   return (
@@ -26,6 +27,10 @@ const CustomDrawerContent = ({navigation}) => {
       <DrawerItem
         label="Endangered Species"
         onPress={() => navigation.navigate('EndangeredStack')}
+      />
+      <DrawerItem
+        label="Admin"
+        onPress={() => navigation.navigate('AdminStack')}
       />
     </DrawerContentScrollView>
   );
@@ -66,6 +71,13 @@ const DrawerNavigator = () => {
         name="EndangeredStack"
         options={{
           drawerLabel: 'Endangered Species',
+        }}
+      />
+      <Drawer.Screen
+        component={AdminNavigator}
+        name="AdminStack"
+        options={{
+          drawerLabel: 'Admin',
         }}
       />
     </Drawer.Navigator>
