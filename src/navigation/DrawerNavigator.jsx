@@ -5,6 +5,7 @@ import {
   DrawerItem,
 } from '@react-navigation/drawer';
 import ArticleNavigator from './ArticleNavigator';
+import MyArticles from '../screens/Article/MyArticles';
 import EndangeredSpeciesNavigator from './EndangeredSpeciesNavigator';
 import AdminNavigator from './AdminNavigator';
 
@@ -18,6 +19,10 @@ const CustomDrawerContent = ({navigation}) => {
       <DrawerItem
         label="Resources"
         onPress={() => navigation.navigate('ResourcesStack')}
+      />
+      <DrawerItem
+        label="MyArticles"
+        onPress={() => navigation.navigate('MyArticles')}
       />
       <DrawerItem
         label="Endangered Species"
