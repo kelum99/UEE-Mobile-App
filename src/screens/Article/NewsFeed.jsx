@@ -83,7 +83,7 @@ const NewsFeed = ({navigation}) => {
                     <Button
                       onPress={() =>
                         navigation.navigate('Article', {
-                          params: {article: item},
+                          article: item,
                         })
                       }
                       _text={{fontWeight: 'bold'}}
