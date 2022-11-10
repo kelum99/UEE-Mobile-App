@@ -73,6 +73,7 @@ const ArticleNavigator = () => {
             title: 'My Articles',
             headerTitleAlign: 'center',
             headerRight: () => HeaderRight(navigation),
+            headerLeft: () => HeaderLeft(navigation),
           };
         }}
       />
