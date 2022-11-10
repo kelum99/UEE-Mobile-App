@@ -74,7 +74,7 @@ const NewsFeed = ({navigation}) => {
                     alignItems="center">
                     <VStack>
                       <Text color="coolGray.600" fontWeight="600">
-                        {item.authors.join(', ')}
+                        {item.author}
                       </Text>
                       <Text color="coolGray.600" fontWeight="400">
                         {moment(item.createdDate).format('YYYY-MM-DD')}

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import MainLayout from '../../components/MainLayout';
 import {
   Actionsheet,
@@ -12,39 +12,59 @@ import {
   useDisclose,
 } from 'native-base';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import useRequest from '../../services/RequestContext';
 
 const MyArticles = ({navigation}) => {
+  const [articles, setArticles] = useState();
   const {isOpen, onOpen, onClose} = useDisclose();
+  const {request} = useRequest();
+
+  const getArticles = async () => {
+    const res = await request.get('Articles');
+    if (res.status === 200) {
+      setArticles(res.data.data);
+    }
+  };
+  useEffect(() => {
+    getArticles().catch(console.error);
+  });
+
   return (
     <MainLayout>
-      <Box backgroundColor="#fff" p={2}>
-        <Pressable onPress={() => navigation.navigate('Article')}>
-          <Stack space={3}>
-            <HStack justifyContent="space-between" alignItmes="center">
-              <Badge colorScheme="success" _text={{color: 'green.500'}}>
-                Success
-              </Badge>
-              <IconButton
-                position="absolute"
-                right={-10}
-                top={-8}
-                _icon={{
-                  as: MaterialCommunityIcons,
-                  name: 'dots-vertical',
-                  color: '#000',
-                  size: 'lg',
-                }}
-                onPress={onOpen}
-              />
-            </HStack>
-            <Box>
-              <Text fontSize={18} fontWeight="bold">
-                Title ASAsaS sadsd asdsada sada d3wad fggfd adasd
-              </Text>
-            </Box>
-          </Stack>
-        </Pressable>
-      </Box>
+      {articles &&
+        articles.map(article => (
+          <Box key={article._id} backgroundColor="#fff" p={2}>
+            <Pressable
+              onPress={() =>
+                navigation.navigate('Article', {article: article})
+              }>
+              <Stack space={3}>
+                <HStack justifyContent="space-between" alignItmes="center">
+                  <Badge colorScheme="success" _text={{color: 'green.500'}}>
+                    {article.status}
+                  </Badge>
+                  <IconButton
+                    position="absolute"
+                    right={-10}
+                    top={-8}
+                    _icon={{
+                      as: MaterialCommunityIcons,
+                      name: 'dots-vertical',
+                      color: '#000',
+                      size: 'lg',
+                    }}
+                    onPress={onOpen}
+                  />
+                </HStack>
+                <Box>
+                  <Text fontSize={18} fontWeight="bold">
+                    {article.title}
+                  </Text>
+                </Box>
+              </Stack>
+            </Pressable>
+          </Box>
+        ))}
       <Actionsheet isOpen={isOpen} onClose={onClose}>
         <Actionsheet.Content>
           <Actionsheet.Item>Preview</Actionsheet.Item>

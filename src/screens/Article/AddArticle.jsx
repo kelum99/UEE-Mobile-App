@@ -1,42 +1,201 @@
-import React from 'react';
+import React, {useState} from 'react';
 import MainLayout from '../../components/MainLayout';
-import {FormControl, Input, Stack, TextArea} from 'native-base';
-import {StyleSheet} from 'react-native';
+import {
+  AspectRatio,
+  Box,
+  Button,
+  Center,
+  FormControl,
+  HStack,
+  Image,
+  Input,
+  Progress,
+  Stack,
+  TextArea,
+  useToast,
+  VStack,
+} from 'native-base';
+import {StyleSheet, ScrollView} from 'react-native';
+import {launchImageLibrary} from 'react-native-image-picker';
+import storage from '@react-native-firebase/storage';
+import useRequest from '../../services/RequestContext';
 
-const AddArticle = () => {
+const AddArticle = ({navigation}) => {
+  const [image, setImage] = useState(null);
+  const [data, setData] = useState({
+    title: '',
+    img: '',
+    description: '',
+    author: '',
+  });
+  const [uploading, setUploading] = useState(false);
+  const [uploaded, setUploaded] = useState(false);
+  const [transferred, setTransferred] = useState(0);
+
+  const {request} = useRequest();
+  const toast = useToast();
+
+  const selectImage = async () => {
+    const options = {
+      mediaType: 'photo',
+      maxWidth: 1920,
+      maxHeight: 1080,
+      quality: 1,
+    };
+    await launchImageLibrary(options, response => {
+      if (response.didCancel) {
+        console.log('User cancelled camera picker');
+      } else if (response.errorCode === 'camera_unavailable') {
+        console.log('Camera not available on device');
+      } else if (response.errorCode === 'permission') {
+        console.log('Permission not satisfied');
+      } else if (response.errorCode === 'others') {
+        console.log(response.errorMessage);
+      }
+      if (response.assets) {
+        console.log('rrr', response.assets);
+        setUploaded(false);
+        setImage(response.assets[0].uri);
+      }
+    });
+  };
+
+  const uploadImage = async () => {
+    const filename = image.substring(image.lastIndexOf('/') + 1);
+    setUploading(true);
+    setTransferred(0);
+    const task = storage().ref(filename).putFile(image);
+    task.on('state_changed', snapshot => {
+      setTransferred(
+        Math.round(snapshot.bytesTransferred / snapshot.totalBytes) * 10000,
+      );
+    });
+    try {
+      await task;
+    } catch (e) {
+      console.error(e);
+    }
+    const imgRef = await storage().ref('/' + filename);
+    if (imgRef) {
+      imgRef.getDownloadURL().then(url => setData({...data, img: url}));
+    }
+    setUploading(false);
+    setUploaded(true);
+  };
+
+  const onSubmit = async () => {
+    try {
+      const res = await request.post('Articles', data);
+      if (res.status === 201) {
+        toast.show({
+          render: () => {
+            return (
+              <Box bg="emerald.500" px="2" py="1" rounded="sm" mb={5}>
+                Article Submitted!
+              </Box>
+            );
+          },
+          placement: 'top',
+        });
+        navigation.navigate('MyArticles');
+      } else {
+        toast.show({
+          render: () => {
+            return (
+              <Box bg="red.500" px="2" py="1" rounded="sm" mb={5}>
+                Article Submission Failed!
+              </Box>
+            );
+          },
+          placement: 'top',
+        });
+      }
+    } catch (e) {
+      console.log('error', e);
+    }
+  };
+
   return (
     <MainLayout>
-      <Stack space={2} mx={3}>
-        <FormControl>
-          <FormControl.Label _text={Styles.labelText}>Title</FormControl.Label>
-          <Input
-            style={Styles.input}
-            variant="outline"
-            placeholder="Enter Title"
-          />
-        </FormControl>
-        <FormControl>
-          <FormControl.Label _text={Styles.labelText}>
-            Author(s)
-          </FormControl.Label>
-          <Input
-            style={Styles.input}
-            variant="outline"
-            placeholder=" Enter Author(s)"
-          />
-        </FormControl>
-        <FormControl>
-          <FormControl.Label _text={Styles.labelText}>
-            Description
-          </FormControl.Label>
-          <TextArea
-            style={Styles.input}
-            variant="outline"
-            h="60%"
-            placeholder="Enter Description"
-          />
-        </FormControl>
-      </Stack>
+      <ScrollView style={{flex: 1}}>
+        <Stack space={2} mx={3}>
+          <FormControl>
+            <FormControl.Label _text={Styles.labelText}>
+              Title
+            </FormControl.Label>
+            <Input
+              onChangeText={text => setData({...data, title: text})}
+              style={Styles.input}
+              variant="outline"
+              placeholder="Enter Title"
+            />
+          </FormControl>
+          <FormControl>
+            <FormControl.Label _text={Styles.labelText}>
+              Author(s)
+            </FormControl.Label>
+            <Input
+              onChangeText={text => setData({...data, author: text})}
+              style={Styles.input}
+              variant="outline"
+              placeholder=" Enter Author(s)"
+            />
+          </FormControl>
+          <FormControl>
+            <FormControl.Label _text={Styles.labelText}>
+              Description
+            </FormControl.Label>
+            <TextArea
+              onChangeText={text => setData({...data, description: text})}
+              style={Styles.input}
+              variant="outline"
+              h={40}
+              placeholder="Enter Description"
+            />
+          </FormControl>
+          {uploading && (
+            <Progress
+              mt={2}
+              value={transferred}
+              mx="3"
+              bg="#fff"
+              _filledTrack={{
+                bg: 'lime.500',
+              }}
+            />
+          )}
+          <HStack my={3} mr={3} justifyContent="space-between">
+            {image ? (
+              <AspectRatio w="68%" ratio={16 / 9}>
+                <Image alt="image" source={{uri: image}} />
+              </AspectRatio>
+            ) : (
+              <AspectRatio w="68%" ratio={16 / 9}>
+                <Image
+                  alt="image"
+                  source={{
+                    uri: 'https://www.libreriaalberti.com/static/img/no-preview.jpg',
+                  }}
+                />
+              </AspectRatio>
+            )}
+
+            <VStack mx={1}>
+              <Button my={3} onPress={selectImage}>
+                {uploaded ? 'Change Image' : 'Browse'}
+              </Button>
+              {!uploaded && (
+                <>
+                  {!uploading && <Button onPress={uploadImage}>Upload</Button>}
+                </>
+              )}
+            </VStack>
+          </HStack>
+          <Center>
+            <Button onPress={onSubmit}>Submit Article</Button>
+          </Center>
+        </Stack>
+      </ScrollView>
     </MainLayout>
   );
 };
