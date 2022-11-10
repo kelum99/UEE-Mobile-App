@@ -8,6 +8,7 @@ import ArticleNavigator from './ArticleNavigator';
 import MyArticles from '../screens/Article/MyArticles';
 import EndangeredSpeciesNavigator from './EndangeredSpeciesNavigator';
 import AdminNavigator from './AdminNavigator';
+import ResourceNavigator from './ResourceNavigator';
 
 const CustomDrawerContent = ({navigation}) => {
   return (
@@ -51,7 +52,8 @@ const DrawerNavigator = () => {
       }}
       drawerContent={props => {
         return <CustomDrawerContent {...props} />;
-      }}>
+      }}
+    >
       <Drawer.Screen
         component={ArticleNavigator}
         name="ArticleStack"
@@ -60,7 +62,7 @@ const DrawerNavigator = () => {
         }}
       />
       <Drawer.Screen
-        component={ArticleNavigator}
+        component={ResourceNavigator}
         name="ResourcesStack"
         options={{
           drawerLabel: 'Resources',
