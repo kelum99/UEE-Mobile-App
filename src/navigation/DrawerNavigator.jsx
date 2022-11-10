@@ -15,7 +15,9 @@ const CustomDrawerContent = ({navigation}) => {
     <DrawerContentScrollView>
       <DrawerItem
         label="NewsFeed"
-        onPress={() => navigation.navigate('ArticleStack')}
+        onPress={() =>
+          navigation.reset({index: 0, routes: [{name: 'ArticleStack'}]})
+        }
       />
       <DrawerItem
         label="Resources"
