@@ -44,8 +44,7 @@ const Read = ({route}) => {
                 <AspectRatio w="100%" ratio={16 / 9}>
                   <Image
                     source={{
-                      uri:
-                        'https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Monachus_schauinslandi.jpg/800px-Monachus_schauinslandi.jpg',
+                      uri: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Monachus_schauinslandi.jpg/800px-Monachus_schauinslandi.jpg',
                     }}
                     alt="image"
                   />

@@ -13,8 +13,7 @@ const Resources = ({navigation}) => {
               <AspectRatio w="100%" ratio={16 / 9}>
                 <Image
                   source={{
-                    uri:
-                      'https://www.innovationnewsnetwork.com/wp-content/uploads/2022/06/supporting-marine-conservation-696x392.jpg',
+                    uri: 'https://www.innovationnewsnetwork.com/wp-content/uploads/2022/06/supporting-marine-conservation-696x392.jpg',
                   }}
                   alt="image"
                 />
@@ -23,8 +22,7 @@ const Resources = ({navigation}) => {
             <Box>
               <Button
                 style={styles.speciesBtn}
-                onPress={() => navigation.navigate('ResourceCat')}
-              >
+                onPress={() => navigation.navigate('ResourceCat')}>
                 Marine Conservation
               </Button>
             </Box>
@@ -36,8 +34,7 @@ const Resources = ({navigation}) => {
               <AspectRatio w="100%" ratio={16 / 9}>
                 <Image
                   source={{
-                    uri:
-                      'https://media.greenmatters.com/brand-img/vULjW84A-/2160x1130/ocean-pollution-1598986193310.jpg',
+                    uri: 'https://media.greenmatters.com/brand-img/vULjW84A-/2160x1130/ocean-pollution-1598986193310.jpg',
                   }}
                   alt="image"
                 />
@@ -46,8 +43,7 @@ const Resources = ({navigation}) => {
             <Box>
               <Button
                 style={styles.speciesBtn}
-                onPress={() => navigation.navigate('ResourceCat')}
-              >
+                onPress={() => navigation.navigate('ResourceCat')}>
                 Ocean Pollution
               </Button>
             </Box>
@@ -60,8 +56,7 @@ const Resources = ({navigation}) => {
               <AspectRatio w="100%" ratio={16 / 9}>
                 <Image
                   source={{
-                    uri:
-                      'https://media.istockphoto.com/id/539675480/photo/tropical-fish-and-turtle.jpg?s=1024x1024&w=is&k=20&c=Wyj9SYlpcNGYJ67Xym4S8qV0ivcsSZn0OtS5yMOUGyk=',
+                    uri: 'https://media.istockphoto.com/id/539675480/photo/tropical-fish-and-turtle.jpg?s=1024x1024&w=is&k=20&c=Wyj9SYlpcNGYJ67Xym4S8qV0ivcsSZn0OtS5yMOUGyk=',
                   }}
                   alt="image"
                 />
@@ -70,8 +65,7 @@ const Resources = ({navigation}) => {
             <Box>
               <Button
                 style={styles.speciesBtn}
-                onPress={() => navigation.navigate('ResourceCat')}
-              >
+                onPress={() => navigation.navigate('ResourceCat')}>
                 Marine Biodiversity
               </Button>
             </Box>
