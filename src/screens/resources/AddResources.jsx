@@ -18,8 +18,7 @@ const AddResources = ({route}) => {
         <Center>
           <FormControl isRequired my={2}>
             <FormControl.Label
-              _text={{fontWeight: 'bold', fontSize: 18, color: '#fff'}}
-            >
+              _text={{fontWeight: 'bold', fontSize: 18, color: '#fff'}}>
               Author Name
             </FormControl.Label>
             <Input
@@ -34,8 +33,7 @@ const AddResources = ({route}) => {
         <Center>
           <FormControl isRequired my={2}>
             <FormControl.Label
-              _text={{fontWeight: 'bold', fontSize: 18, color: '#fff'}}
-            >
+              _text={{fontWeight: 'bold', fontSize: 18, color: '#fff'}}>
               Description
             </FormControl.Label>
             <TextArea
@@ -50,8 +48,7 @@ const AddResources = ({route}) => {
         <Center>
           <FormControl isRequired my={2}>
             <FormControl.Label
-              _text={{fontWeight: 'bold', fontSize: 18, color: '#fff'}}
-            >
+              _text={{fontWeight: 'bold', fontSize: 18, color: '#fff'}}>
               Added By
             </FormControl.Label>
             <Input
@@ -66,8 +63,7 @@ const AddResources = ({route}) => {
           <Button
             mt="5"
             backgroundColor="#091540"
-            _text={{fontWeight: 'bold', fontSize: 16, color: '#fff'}}
-          >
+            _text={{fontWeight: 'bold', fontSize: 16, color: '#fff'}}>
             Submit
           </Button>
           <Button
@@ -75,8 +71,7 @@ const AddResources = ({route}) => {
             mt="5"
             backgroundColor="transparent"
             _text={{fontWeight: 'bold', fontSize: 16, color: '#091540'}}
-            borderColor="#091540"
-          >
+            borderColor="#091540">
             Cancel
           </Button>
         </HStack>

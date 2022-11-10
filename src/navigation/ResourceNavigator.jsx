@@ -32,8 +32,7 @@ const ResourceNavigator = () => {
         headerStyle: {backgroundColor: '#0096C7'},
         headerShadowVisible: false,
         headerTintColor: '#fff',
-      }}
-    >
+      }}>
       <ResourceStack.Screen
         name="Resources"
         component={Resources}

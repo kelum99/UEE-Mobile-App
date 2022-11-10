@@ -23,8 +23,7 @@ const ResourceCat = ({route, navigation}) => {
         contentContainerStyle={{
           alignItems: 'center',
           justifyContent: 'center',
-        }}
-      >
+        }}>
         <Box>
           <Pressable>
             <HStack justifyContent="space-between">

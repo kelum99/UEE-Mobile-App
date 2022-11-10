@@ -52,8 +52,7 @@ const DrawerNavigator = () => {
       }}
       drawerContent={props => {
         return <CustomDrawerContent {...props} />;
-      }}
-    >
+      }}>
       <Drawer.Screen
         component={ArticleNavigator}
         name="ArticleStack"
