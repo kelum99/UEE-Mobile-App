@@ -21,7 +21,7 @@ import {
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
-const Endangered = ({route, navigation}) => {
+const Records = ({route, navigation}) => {
   const {isOpen, onOpen, onClose} = useDisclose();
 
   return (
@@ -37,7 +37,7 @@ const Endangered = ({route, navigation}) => {
           <Pressable>
             <HStack justifyContent="space-between">
               <IconButton
-                onPress={() => navigation.navigate('AddSpecies')}
+                onPress={() => navigation.navigate('AddResources')}
                 _icon={{
                   as: AntDesign,
                   name: 'plussquare',
@@ -83,7 +83,7 @@ const Endangered = ({route, navigation}) => {
                 </Box>
                 <HStack justifyContent="space-between">
                   <IconButton
-                    onPress={() => navigation.navigate('AddSpecies')}
+                    onPress={() => navigation.navigate('AddResources')}
                     _icon={{
                       as: MaterialIcons,
                       name: 'remove-red-eye',
@@ -175,4 +175,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Endangered;
+export default Records;
