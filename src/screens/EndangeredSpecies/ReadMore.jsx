@@ -11,17 +11,16 @@ import {
   Center,
   HStack,
 } from 'native-base';
-import axios from 'axios';
 import moment from 'moment';
+import useRequest from '../../services/RequestContext';
 
 const Article = ({route}) => {
   const [species, setSpecies] = useState({});
+  const {request} = useRequest();
   const {speciesData} = route.params;
   const getSpecies = async () => {
     try {
-      const res = await axios.get(
-        `http://10.0.2.2:5000/api/EndangeredSpecies/${speciesData._id}`,
-      );
+      const res = await request.get(`EndangeredSpecies/${speciesData._id}`);
       if (res.status === 200) {
         setSpecies(res.data);
       }
@@ -37,13 +36,17 @@ const Article = ({route}) => {
       <ScrollView>
         {species && (
           <>
-            <Box m={4} rounded="lg" overflow="hidden" backgroundColor="#fff">
+            <Box
+              m={4}
+              rounded="lg"
+              overflow="hidden"
+              backgroundColor="#fff"
+              flex={1}>
               <Box>
                 <AspectRatio w="100%" ratio={16 / 9}>
                   <Image
                     source={{
-                      uri:
-                        'https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Monachus_schauinslandi.jpg/800px-Monachus_schauinslandi.jpg',
+                      uri: `${speciesData.imageURL}`,
                     }}
                     alt="image"
                   />
@@ -63,8 +66,7 @@ const Article = ({route}) => {
                   <HStack justifyContent="space-between">
                     <Text fontWeight="600">{species.addedBy}</Text>
                     <Text fontWeight="600">
-                      {' '}
-                      {moment(speciesData.addedDate).format('YYYY-MM-DD')}
+                      {moment(species.addedDate).format('YYYY-MM-DD')}
                     </Text>
                   </HStack>
                 </VStack>

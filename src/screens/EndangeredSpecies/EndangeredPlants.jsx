@@ -18,7 +18,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import moment from 'moment';
 import useRequest from '../../services/RequestContext';
 
-const Endangered = ({navigation}) => {
+const EndangeredPlants = ({navigation}) => {
   const [species, setSpecies] = useState([]);
   const {request} = useRequest();
   const getAllSpecies = async () => {
@@ -76,7 +76,7 @@ const Endangered = ({navigation}) => {
           {species && (
             <>
               {species
-                .filter(val => val.type === 'Animal')
+                .filter(val => val.type === 'Plant')
                 .map(speciesData => (
                   <Pressable key={speciesData._id}>
                     <Box
@@ -154,4 +154,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Endangered;
+export default EndangeredPlants;

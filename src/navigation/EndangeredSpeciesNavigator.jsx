@@ -7,6 +7,7 @@ import AddSpecies from '../screens/EndangeredSpecies/AddSpecies';
 import MyRecords from '../screens/EndangeredSpecies/MyRecords';
 import {Box, IconButton} from 'native-base';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import EndangeredPlants from '../screens/EndangeredSpecies/EndangeredPlants';
 
 export const HeaderLeft = ({navigation}) => {
   return (
@@ -45,45 +46,55 @@ const EndangeredSpeciesNavigator = () => {
           };
         }}
       />
-     <EndangeredStack.Screen
+      <EndangeredStack.Screen
         name="Endangered"
         component={Endangered}
         options={navigation => {
-        return {
-          title: 'Endangered Species',
-          headerTitleAlign: 'center',
-        };
+          return {
+            title: 'Endangered Animals',
+            headerTitleAlign: 'center',
+          };
         }}
-     />
-      <EndangeredStack.Screen
-         name="ReadMore"
-         component={ReadMore}
-         options={navigation => {
-         return {
-           title: ''
-         };
-       }}
       />
       <EndangeredStack.Screen
-         name="AddSpecies"
-         component={AddSpecies}
-         options={navigation => {
-             return {
-               title: 'Add Endangered Species',
-               headerTitleAlign: 'center',
-             };
-             }}
-     />
+        name="EndangeredPlants"
+        component={EndangeredPlants}
+        options={navigation => {
+          return {
+            title: 'Endangered Plants',
+            headerTitleAlign: 'center',
+          };
+        }}
+      />
       <EndangeredStack.Screen
-             name="MyRecords"
-             component={MyRecords}
-             options={navigation => {
-             return {
-               title: 'My Records',
-               headerTitleAlign: 'center',
-             };
-             }}
-     />
+        name="ReadMore"
+        component={ReadMore}
+        options={navigation => {
+          return {
+            title: '',
+          };
+        }}
+      />
+      <EndangeredStack.Screen
+        name="AddSpecies"
+        component={AddSpecies}
+        options={navigation => {
+          return {
+            title: 'Add Endangered Species',
+            headerTitleAlign: 'center',
+          };
+        }}
+      />
+      <EndangeredStack.Screen
+        name="MyRecords"
+        component={MyRecords}
+        options={navigation => {
+          return {
+            title: 'My Records',
+            headerTitleAlign: 'center',
+          };
+        }}
+      />
     </EndangeredStack.Navigator>
   );
 };
