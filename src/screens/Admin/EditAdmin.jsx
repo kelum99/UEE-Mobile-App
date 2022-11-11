@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {ScrollView, StyleSheet} from 'react-native';
+import {Alert, ScrollView, StyleSheet} from 'react-native';
 import MainLayout from '../../components/MainLayout';
 import {
   AspectRatio,
@@ -10,17 +10,42 @@ import {
   HStack,
   Image,
   Input,
+  useDisclose,
+  useToast,
 } from 'native-base';
 import axios from 'axios';
+import useRequest from '../../services/RequestContext';
 
-const EditAdmin = ({route}) => {
+const EditAdmin = ({navigation, route}) => {
   const [admin, setAdmin] = useState({});
-  const {adminData} = route.params;
+  const [data, setData] = useState({
+    name: '',
+    mobile: '',
+    email: '',
+    password: '',
+  });
+  const {edit} = route.params;
+  const toast = useToast();
+  const {request} = useRequest();
+  const [selected, setSelected] = useState();
+  const {isOpen, onOpen, onClose} = useDisclose();
+
+  useEffect(() => {
+    if (edit && admin) {
+      setData({
+        name: admin.name,
+        mobile: admin.mobile,
+        email: admin.email,
+        password: admin.password,
+      });
+      console.log('edit', edit);
+    }
+  }, [admin, edit]);
 
   const getAdmin = async () => {
     try {
       const res = await axios.get(
-        `http://10.0.2.2:5000/api/Admins/${adminData._id}`,
+        `http://10.0.2.2:5000/api/Admins/${data._id}`,
       );
       if (res.status === 200) {
         setAdmin(res.data);
@@ -33,6 +58,60 @@ const EditAdmin = ({route}) => {
   useEffect(() => {
     getAdmin();
   });
+
+  const onUpdate = async () => {
+    try {
+      const res = await request.put(`Admins/${admin._id}`, {
+        ...data,
+        status: admin.status,
+      });
+      if (res.status === 200) {
+        toast.show({
+          render: () => {
+            return (
+              <Box bg="emerald.500" px="2" py="1" rounded="sm" mb={5}>
+                Admin Updated !
+              </Box>
+            );
+          },
+          placement: 'top',
+        });
+        // eslint-disable-next-line no-undef
+        navigation.reset({index: 0, routes: [(name: 'ViewAdmin')]});
+      }
+    } catch (e) {
+      console.log('error', e);
+    }
+  };
+
+  const onDelete = async () => {
+    const res = await request.delete(`Admin/${selected?._id}`);
+    if (res.status === 200) {
+      toast.show({
+        render: () => {
+          return (
+            <Box bg="red.500" px="2" py="1" rounded="sm" mb={5}>
+              Admin Deleted !
+            </Box>
+          );
+        },
+        placement: 'top',
+      });
+      onClose();
+      setSelected(undefined);
+      getAdmin().catch(console.error);
+    }
+  };
+
+  const deletePopup = () => {
+    Alert.alert('Delete Admin', 'Are you sure delete this admin', [
+      {
+        text: 'Cancel',
+        style: 'cancel',
+      },
+      {text: 'Delete', onPress: onDelete, style: 'default'},
+    ]);
+  };
 
   return (
     <MainLayout>
@@ -63,31 +142,52 @@ const EditAdmin = ({route}) => {
                   _text={{fontWeight: 'bold', fontSize: 18, color: '#fff'}}>
                   Name
                 </FormControl.Label>
-                <Input fontSize={14} width="350" variant="underlined" />
+                <Input
+                  defaultValue={edit ? admin.name : ''}
+                  fontSize={14}
+                  width="350"
+                  variant="underlined"
+                />
               </FormControl>
               <FormControl isRequired my={2}>
                 <FormControl.Label
                   _text={{fontWeight: 'bold', fontSize: 18, color: '#fff'}}>
                   Phone Number
                 </FormControl.Label>
-                <Input fontSize={14} width="350" variant="underlined" />
+                <Input
+                  defaultValue={edit ? admin.mobile : ''}
+                  fontSize={14}
+                  width="350"
+                  variant="underlined"
+                />
               </FormControl>
               <FormControl isRequired my={2}>
                 <FormControl.Label
                   _text={{fontWeight: 'bold', fontSize: 18, color: '#fff'}}>
                   Email
                 </FormControl.Label>
-                <Input fontSize={14} width="350" variant="underlined" />
+                <Input
+                  defaultValue={edit ? admin.email : ''}
+                  fontSize={14}
+                  width="350"
+                  variant="underlined"
+                />
               </FormControl>
               <FormControl isRequired my={2}>
                 <FormControl.Label
                   _text={{fontWeight: 'bold', fontSize: 18, color: '#fff'}}>
                   Password
                 </FormControl.Label>
-                <Input fontSize={14} width="350" variant="underlined" />
+                <Input
+                  defaultValue={edit ? admin.password : ''}
+                  fontSize={14}
+                  width="350"
+                  variant="underlined"
+                />
               </FormControl>
               <HStack style={{justifyContent: 'center'}}>
                 <Button
+                  onPress={onUpdate}
                   style={styles.btn}
                   mt="5"
                   backgroundColor="#091540"
@@ -95,6 +195,7 @@ const EditAdmin = ({route}) => {
                   Update
                 </Button>
                 <Button
+                  onPress={deletePopup}
                   style={styles.btn}
                   mt="5"
                   backgroundColor="#c21313"
