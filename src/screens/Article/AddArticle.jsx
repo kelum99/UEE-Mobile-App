@@ -64,7 +64,9 @@ const AddArticle = ({navigation}) => {
     const filename = image.substring(image.lastIndexOf('/') + 1);
     setUploading(true);
     setTransferred(0);
-    const task = storage().ref(filename).putFile(image);
+    const task = storage()
+      .ref(filename)
+      .putFile(image);
     task.on('state_changed', snapshot => {
       setTransferred(
         Math.round(snapshot.bytesTransferred / snapshot.totalBytes) * 10000,
@@ -174,7 +176,8 @@ const AddArticle = ({navigation}) => {
                 <Image
                   alt="image"
                   source={{
-                    uri: 'https://www.libreriaalberti.com/static/img/no-preview.jpg',
+                    uri:
+                      'https://www.libreriaalberti.com/static/img/no-preview.jpg',
                   }}
                 />
               </AspectRatio>
