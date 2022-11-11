@@ -86,8 +86,7 @@ const MyArticles = ({navigation}) => {
               px="2"
               py="1"
               rounded="sm"
-              mb={5}
-            >
+              mb={5}>
               {'Article ' + message + ' !'}
             </Box>
           );
@@ -112,12 +111,17 @@ const MyArticles = ({navigation}) => {
         <>
           {articles &&
             articles.map(article => (
-              <Box key={article._id} backgroundColor="#fff" p={2} my={1}>
+              <Box
+                key={article._id}
+                backgroundColor="#fff"
+                p={3}
+                my={1}
+                mx={2}
+                rounded="lg">
                 <Pressable
                   onPress={() =>
                     navigation.navigate('Article', {article: article})
-                  }
-                >
+                  }>
                   <Stack space={3}>
                     <HStack justifyContent="space-between" alignItmes="center">
                       <Badge
@@ -134,8 +138,7 @@ const MyArticles = ({navigation}) => {
                             : article.status === 'Approved'
                             ? 'teal'
                             : 'Default'
-                        }
-                      >
+                        }>
                         {article.status}
                       </Badge>
                       <IconButton
@@ -171,36 +174,30 @@ const MyArticles = ({navigation}) => {
         onClose={() => {
           setSelected(undefined);
           onClose();
-        }}
-      >
+        }}>
         <Actionsheet.Content>
           <Actionsheet.Item
-            onPress={() => navigation.navigate('Article', {article: selected})}
-          >
+            onPress={() => navigation.navigate('Article', {article: selected})}>
             Preview
           </Actionsheet.Item>
           {selected?.status === 'Draft' ? (
             <Actionsheet.Item
-              onPress={() => updateStatus('Pending', 'Approval Requested')}
-            >
+              onPress={() => updateStatus('Pending', 'Approval Requested')}>
               Request Approval
             </Actionsheet.Item>
           ) : selected?.status === 'Declined' ? (
             <Actionsheet.Item
-              onPress={() => updateStatus('Pending', 'Approval Requested')}
-            >
+              onPress={() => updateStatus('Pending', 'Approval Requested')}>
               Request Again
             </Actionsheet.Item>
           ) : selected?.status === 'Approved' ? (
             <Actionsheet.Item
-              onPress={() => updateStatus('Published', 'Published')}
-            >
+              onPress={() => updateStatus('Published', 'Published')}>
               Publish
             </Actionsheet.Item>
           ) : selected?.status === 'Published' ? (
             <Actionsheet.Item
-              onPress={() => updateStatus('Unpublished', 'Unpublished')}
-            >
+              onPress={() => updateStatus('Unpublished', 'Unpublished')}>
               Un-publish
             </Actionsheet.Item>
           ) : (

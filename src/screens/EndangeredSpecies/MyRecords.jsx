@@ -103,10 +103,10 @@ const Endangered = ({route, navigation}) => {
                   backgroundColor="#fff"
                   borderWidth="1">
                   <Box>
-                    <AspectRatio w="100%" ratio={16 / 9}>
-                      <Image
-                        source={{
-                          uri: `${speciesData.imageURL}`,
+              <AspectRatio w="100%" ratio={16 / 9}>
+                <Image
+                  source={{
+                    uri: `${speciesData.imageURL}`,
                         }}
                         alt="image"
                       />

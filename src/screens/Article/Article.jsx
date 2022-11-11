@@ -29,7 +29,9 @@ const Article = ({route}) => {
             <ScrollView style={{flex: 1}}>
               <Heading>{article.title}</Heading>
               <VStack my={2}>
-                <Text fontweight="600">{article.author}</Text>
+                <Text color="#122466" style={{fontWeight: 'bold'}}>
+                  {article.author}
+                </Text>
                 <Text>{moment(article.createdDate).format('YYYY-MM-DD')}</Text>
               </VStack>
               <Text>{article.description}</Text>

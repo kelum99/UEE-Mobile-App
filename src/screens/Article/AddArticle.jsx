@@ -46,7 +46,6 @@ const AddArticle = ({navigation, route}) => {
         author: article.author,
         img: article.img,
       });
-      console.log('edit', edit);
     }
   }, [article, edit]);
 
@@ -78,9 +77,7 @@ const AddArticle = ({navigation, route}) => {
     const filename = image.substring(image.lastIndexOf('/') + 1);
     setUploading(true);
     setTransferred(0);
-    const task = storage()
-      .ref(filename)
-      .putFile(image);
+    const task = storage().ref(filename).putFile(image);
     task.on('state_changed', snapshot => {
       setTransferred(
         Math.round(snapshot.bytesTransferred / snapshot.totalBytes) * 10000,
@@ -94,9 +91,9 @@ const AddArticle = ({navigation, route}) => {
     const imgRef = await storage().ref('/' + filename);
     if (imgRef) {
       imgRef.getDownloadURL().then(url => setData({...data, img: url}));
+      setUploading(false);
+      setUploaded(true);
     }
-    setUploading(false);
-    setUploaded(true);
   };
 
   const onSubmit = async () => {
@@ -231,18 +228,24 @@ const AddArticle = ({navigation, route}) => {
             )}
 
             <VStack mx={1}>
-              <Button my={3} onPress={selectImage}>
+              <Button backgroundColor="#091540" my={3} onPress={selectImage}>
                 {uploaded ? 'Change Image' : 'Browse'}
               </Button>
               {!uploaded && (
                 <>
-                  {!uploading && <Button onPress={uploadImage}>Upload</Button>}
+                  {!uploading && (
+                    <Button backgroundColor="#091540" onPress={uploadImage}>
+                      Upload
+                    </Button>
+                  )}
                 </>
               )}
             </VStack>
           </HStack>
           <Center>
-            <Button onPress={edit ? onUpdate : onSubmit}>
+            <Button
+              backgroundColor="#091540"
+              onPress={edit ? onUpdate : onSubmit}>
               {edit ? 'Update Article' : 'Submit Article'}
             </Button>
           </Center>

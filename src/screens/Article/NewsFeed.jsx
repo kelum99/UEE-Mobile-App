@@ -80,14 +80,15 @@ const NewsFeed = ({navigation}) => {
                       justifyContent="space-between"
                       alignItems="center">
                       <VStack>
-                        <Text color="coolGray.600" fontWeight="600">
+                        <Text color="#122466" fontWeight="600">
                           {item.author}
                         </Text>
-                        <Text color="coolGray.600" fontWeight="400">
+                        <Text color="#122466" fontWeight="400">
                           {moment(item.createdDate).format('YYYY-MM-DD')}
                         </Text>
                       </VStack>
                       <Button
+                        backgroundColor="#091540"
                         onPress={() =>
                           navigation.navigate('Article', {
                             article: item,

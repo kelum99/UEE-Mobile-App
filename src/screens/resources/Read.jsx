@@ -11,41 +11,21 @@ import {
   Center,
   HStack,
 } from 'native-base';
-import axios from 'axios';
-import moment from 'moment';
 
-const Read = ({route}) => {
-  const [resources, setResources] = useState({});
-  const {resourcesData} = route.params;
-  const getResources = async () => {
-    try {
-      const res = await axios.get(
-        `http://localhost:5000/api/Resources/${resourcesData._id}`,
-      );
-      if (res.status === 200) {
-        setResources(res.data);
-      }
-    } catch (error) {
-      console.log('error', error);
-    }
-  };
-
-  useEffect(() => {
-    getResources();
-  });
+const ReadRecord = ({route}) => {
+  const {record} = route.params;
 
   return (
     <MainLayout>
       <ScrollView>
-        {resources && (
+        {record && (
           <>
             <Box m={4} rounded="lg" overflow="hidden" backgroundColor="#fff">
               <Box>
                 <AspectRatio w="100%" ratio={16 / 9}>
                   <Image
                     source={{
-                      uri:
-                        'https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Monachus_schauinslandi.jpg/800px-Monachus_schauinslandi.jpg',
+                      uri: record.img,
                     }}
                     alt="image"
                   />
@@ -54,16 +34,15 @@ const Read = ({route}) => {
               <Box>
                 <VStack my={4}>
                   <Center>
-                    <Heading>{resources.name}</Heading>
-                    <Text fontStyle="italic">{resources.authorName}</Text>
+                    <Heading>{record.title}</Heading>
                   </Center>
                 </VStack>
                 <VStack my={3} mx={4}>
-                  <Text>{resources.description} </Text>
+                  <Text>{record.description} </Text>
                 </VStack>
                 <VStack mx={4} my={4}>
                   <HStack justifyContent="space-between">
-                    <Text fontWeight="600">{resources.addedBy}</Text>
+                    <Text fontWeight="600">{record.addedBy}</Text>
                   </HStack>
                 </VStack>
               </Box>
@@ -74,4 +53,4 @@ const Read = ({route}) => {
     </MainLayout>
   );
 };
-export default Read;
+export default ReadRecord;

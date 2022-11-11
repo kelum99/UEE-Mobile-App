@@ -5,6 +5,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Resources from '../screens/resources/Resources';
 import ResourceCat from '../screens/resources/ResourceCat';
 import AddResources from '../screens/resources/AddResources';
+import ReadRecord from '../screens/resources/Read';
 import Records from '../screens/resources/Records';
 
 export const HeaderLeft = ({navigation}) => {
@@ -32,8 +33,7 @@ const ResourceNavigator = () => {
         headerStyle: {backgroundColor: '#0096C7'},
         headerShadowVisible: false,
         headerTintColor: '#fff',
-      }}
-    >
+      }}>
       <ResourceStack.Screen
         name="Resources"
         component={Resources}
@@ -73,7 +73,17 @@ const ResourceNavigator = () => {
         component={Records}
         options={navigation => {
           return {
-            title: 'Add Resources',
+            title: 'Records',
+            headerTitleAlign: 'center',
+          };
+        }}
+      />
+      <ResourceStack.Screen
+        name="ReadRecord"
+        component={ReadRecord}
+        options={navigation => {
+          return {
+            title: '',
             headerTitleAlign: 'center',
           };
         }}
