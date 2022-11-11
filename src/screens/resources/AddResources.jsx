@@ -1,15 +1,21 @@
-import React from 'react';
+import React, {useState} from 'react';
 import MainLayout from '../../components/MainLayout';
 import {
+  AspectRatio,
   Box,
-  FormControl,
-  Input,
-  Center,
-  TextArea,
   Button,
+  Center,
+  FormControl,
   HStack,
+  Image,
+  Input,
+  Progress,
+  Stack,
+  TextArea,
+  useToast,
+  VStack,
 } from 'native-base';
-import {StyleSheet} from 'react-native';
+import {StyleSheet, ScrollView} from 'react-native';
 import {launchImageLibrary} from 'react-native-image-picker';
 import storage from '@react-native-firebase/storage';
 import useRequest from '../../services/RequestContext';
@@ -17,7 +23,7 @@ import useRequest from '../../services/RequestContext';
 const AddResources = ({navigation}) => {
   const [image, setImage] = useState(null);
   const [data, setData] = useState({
-    authorName: '',
+    title: '',
     img: '',
     description: '',
     addedBy: '',
@@ -82,7 +88,7 @@ const AddResources = ({navigation}) => {
 
   const onSubmit = async () => {
     try {
-      const res = await request.post('Articles', data);
+      const res = await request.post('Resources', data);
       if (res.status === 201) {
         toast.show({
           render: () => {
@@ -94,7 +100,7 @@ const AddResources = ({navigation}) => {
           },
           placement: 'top',
         });
-        navigation.navigate('MyArticles');
+        navigation.navigate('Records');
       } else {
         toast.show({
           render: () => {
@@ -121,10 +127,10 @@ const AddResources = ({navigation}) => {
               <FormControl.Label
                 _text={{fontWeight: 'bold', fontSize: 18, color: '#fff'}}
               >
-                Author Name
+                Title
               </FormControl.Label>
               <Input
-                onChangeText={text => setData({...data, authorName: text})}
+                onChangeText={text => setData({...data, title: text})}
                 fontSize={14}
                 width="350"
                 variant="outline"
@@ -240,6 +246,15 @@ const Styles = StyleSheet.create({
   cancelBtn: {
     width: 100,
     borderColor: '#091540',
+  },
+  labelText: {
+    fontSize: 16,
+    color: '#fff',
+  },
+  input: {
+    fontSize: 14,
+    backgroundColor: '#fff',
+    paddingLeft: 10,
   },
 });
 export default AddResources;

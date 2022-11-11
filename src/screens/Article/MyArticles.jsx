@@ -70,9 +70,8 @@ const MyArticles = ({navigation}) => {
         articles.map(article => (
           <Box key={article._id} backgroundColor="#fff" p={2} my={1}>
             <Pressable
-              onPress={() =>
-                navigation.navigate('Article', {article: article})
-              }>
+              onPress={() => navigation.navigate('Article', {article: article})}
+            >
               <Stack space={3}>
                 <HStack justifyContent="space-between" alignItmes="center">
                   <Badge colorScheme="success" _text={{color: 'green.500'}}>
@@ -108,10 +107,12 @@ const MyArticles = ({navigation}) => {
         onClose={() => {
           setSelected(undefined);
           onClose();
-        }}>
+        }}
+      >
         <Actionsheet.Content>
           <Actionsheet.Item
-            onPress={() => navigation.navigate('Article', {article: selected})}>
+            onPress={() => navigation.navigate('Article', {article: selected})}
+          >
             Preview
           </Actionsheet.Item>
           {selected?.status === 'Draft' ? (
