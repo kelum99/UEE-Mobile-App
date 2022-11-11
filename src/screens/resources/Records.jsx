@@ -21,7 +21,7 @@ import {
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
-const Endangered = ({route, navigation}) => {
+const Records = ({route, navigation}) => {
   const {isOpen, onOpen, onClose} = useDisclose();
 
   return (
@@ -31,13 +31,12 @@ const Endangered = ({route, navigation}) => {
         contentContainerStyle={{
           alignItems: 'center',
           justifyContent: 'center',
-        }}
-      >
+        }}>
         <Box>
           <Pressable>
             <HStack justifyContent="space-between">
               <IconButton
-                onPress={() => navigation.navigate('AddSpecies')}
+                onPress={() => navigation.navigate('AddResources')}
                 _icon={{
                   as: AntDesign,
                   name: 'plussquare',
@@ -53,14 +52,12 @@ const Endangered = ({route, navigation}) => {
             overflow="hidden"
             borderColor="coolGray.200"
             backgroundColor="#fff"
-            borderWidth="1"
-          >
+            borderWidth="1">
             <Box>
               <AspectRatio w="100%" ratio={16 / 9}>
                 <Image
                   source={{
-                    uri:
-                      'https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Monachus_schauinslandi.jpg/800px-Monachus_schauinslandi.jpg',
+                    uri: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Monachus_schauinslandi.jpg/800px-Monachus_schauinslandi.jpg',
                   }}
                   alt="image"
                 />
@@ -83,7 +80,7 @@ const Endangered = ({route, navigation}) => {
                 </Box>
                 <HStack justifyContent="space-between">
                   <IconButton
-                    onPress={() => navigation.navigate('AddSpecies')}
+                    onPress={() => navigation.navigate('AddResources')}
                     _icon={{
                       as: MaterialIcons,
                       name: 'remove-red-eye',
@@ -139,8 +136,7 @@ const Endangered = ({route, navigation}) => {
                       onPress={onClose}
                       borderRadius="full"
                       variant="outline"
-                      style={styles.cancelBtn}
-                    >
+                      style={styles.cancelBtn}>
                       <Text color="#091540" fontWeight="bold">
                         Cancel
                       </Text>
@@ -175,4 +171,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Endangered;
+export default Records;

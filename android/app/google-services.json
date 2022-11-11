@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "370530344339",
+    "project_id": "uee-mobile-app-7a4d0",
+    "storage_bucket": "uee-mobile-app-7a4d0.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:370530344339:android:ea66e6d407950f7b681c66",
+        "android_client_info": {
+          "package_name": "com.oceanic"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "370530344339-q7gls7e4bahoqqatr31oel3iu1gvv883.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBbuXhwp3L-Fm_Q2A5lwBGgue020LCoadU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "370530344339-q7gls7e4bahoqqatr31oel3iu1gvv883.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -14,36 +14,37 @@ import {
 import axios from 'axios';
 import moment from 'moment';
 
-const Article = ({route}) => {
-  const [species, setSpecies] = useState({});
-  const {speciesData} = route.params;
-  const getSpecies = async () => {
+const Read = ({route}) => {
+  const [resources, setResources] = useState({});
+  const {resourcesData} = route.params;
+  const getResources = async () => {
     try {
       const res = await axios.get(
-        `http://10.0.2.2:5000/api/EndangeredSpecies/${speciesData._id}`,
+        `http://localhost:5000/api/Resources/${resourcesData._id}`,
       );
       if (res.status === 200) {
-        setSpecies(res.data);
+        setResources(res.data);
       }
     } catch (error) {
       console.log('error', error);
     }
   };
+
   useEffect(() => {
-    getSpecies();
+    getResources();
   });
+
   return (
     <MainLayout>
       <ScrollView>
-        {species && (
+        {resources && (
           <>
             <Box m={4} rounded="lg" overflow="hidden" backgroundColor="#fff">
               <Box>
                 <AspectRatio w="100%" ratio={16 / 9}>
                   <Image
                     source={{
-                      uri:
-                        'https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Monachus_schauinslandi.jpg/800px-Monachus_schauinslandi.jpg',
+                      uri: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Monachus_schauinslandi.jpg/800px-Monachus_schauinslandi.jpg',
                     }}
                     alt="image"
                   />
@@ -52,19 +53,19 @@ const Article = ({route}) => {
               <Box>
                 <VStack my={4}>
                   <Center>
-                    <Heading>{species.name}</Heading>
-                    <Text fontStyle="italic">{species.scientificName}</Text>
+                    <Heading>{resources.name}</Heading>
+                    <Text fontStyle="italic">{resources.scientificName}</Text>
                   </Center>
                 </VStack>
                 <VStack my={3} mx={4}>
-                  <Text>{species.description} </Text>
+                  <Text>{resources.description} </Text>
                 </VStack>
                 <VStack mx={4} my={4}>
                   <HStack justifyContent="space-between">
-                    <Text fontWeight="600">{species.addedBy}</Text>
+                    <Text fontWeight="600">{resources.addedBy}</Text>
                     <Text fontWeight="600">
                       {' '}
-                      {moment(speciesData.addedDate).format('YYYY-MM-DD')}
+                      {moment(resourcesData.addedDate).format('YYYY-MM-DD')}
                     </Text>
                   </HStack>
                 </VStack>
@@ -76,5 +77,4 @@ const Article = ({route}) => {
     </MainLayout>
   );
 };
-
-export default Article;
+export default Read;

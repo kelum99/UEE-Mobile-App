@@ -5,19 +5,27 @@ import {
   DrawerItem,
 } from '@react-navigation/drawer';
 import ArticleNavigator from './ArticleNavigator';
+import MyArticles from '../screens/Article/MyArticles';
 import EndangeredSpeciesNavigator from './EndangeredSpeciesNavigator';
 import AdminNavigator from './AdminNavigator';
+import ResourceNavigator from './ResourceNavigator';
 
 const CustomDrawerContent = ({navigation}) => {
   return (
     <DrawerContentScrollView>
       <DrawerItem
         label="NewsFeed"
-        onPress={() => navigation.navigate('ArticleStack')}
+        onPress={() =>
+          navigation.reset({index: 0, routes: [{name: 'ArticleStack'}]})
+        }
       />
       <DrawerItem
         label="Resources"
         onPress={() => navigation.navigate('ResourcesStack')}
+      />
+      <DrawerItem
+        label="MyArticles"
+        onPress={() => navigation.navigate('MyArticles')}
       />
       <DrawerItem
         label="Endangered Species"
@@ -55,7 +63,7 @@ const DrawerNavigator = () => {
         }}
       />
       <Drawer.Screen
-        component={ArticleNavigator}
+        component={ResourceNavigator}
         name="ResourcesStack"
         options={{
           drawerLabel: 'Resources',
