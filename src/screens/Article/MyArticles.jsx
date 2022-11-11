@@ -64,6 +64,25 @@ const MyArticles = ({navigation}) => {
     ]);
   };
 
+  const updateStatus = async (status, message) => {
+    const res = await request.patch(`Articles/status/${selected._id}`, {
+      status: status,
+    });
+    if (res.status === 200) {
+      toast.show({
+        render: () => {
+          return (
+            <Box bg="emerald.500" px="2" py="1" rounded="sm" mb={5}>
+              Article {message}!
+            </Box>
+          );
+        },
+        placement: 'top',
+      });
+      getArticles().catch(console.error);
+    }
+  };
+
   return (
     <MainLayout>
       {articles &&
@@ -115,13 +134,25 @@ const MyArticles = ({navigation}) => {
             Preview
           </Actionsheet.Item>
           {selected?.status === 'Draft' ? (
-            <Actionsheet.Item>Request Approval</Actionsheet.Item>
+            <Actionsheet.Item
+              onPress={() => updateStatus('Pending', 'Approval Requested')}>
+              Request Approval
+            </Actionsheet.Item>
           ) : selected?.status === 'Declined' ? (
-            <Actionsheet.Item>Request Again</Actionsheet.Item>
+            <Actionsheet.Item
+              onPress={() => updateStatus('Pending', 'Approval Requested')}>
+              Request Again
+            </Actionsheet.Item>
           ) : selected?.status === 'Approved' ? (
-            <Actionsheet.Item>Publish</Actionsheet.Item>
+            <Actionsheet.Item
+              onPress={() => updateStatus('Published', 'Published')}>
+              Publish
+            </Actionsheet.Item>
           ) : selected?.status === 'Published' ? (
-            <Actionsheet.Item>Un-publish</Actionsheet.Item>
+            <Actionsheet.Item
+              onPress={() => updateStatus('Unpublished', 'Unpublished')}>
+              Un-publish
+            </Actionsheet.Item>
           ) : (
             <></>
           )}
