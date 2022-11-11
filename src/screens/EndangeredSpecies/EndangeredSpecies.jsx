@@ -28,7 +28,7 @@ const EndangeredSpecies = ({navigation}) => {
           </Box>
         </Box>
       </Pressable>
-      <Pressable onPress={() => navigation.navigate('Endangered')}>
+      <Pressable onPress={() => navigation.navigate('EndangeredPlants')}>
         <Box m={4} rounded="lg" overflow="hidden" backgroundColor="#fff">
           <Box>
             <AspectRatio w="100%" ratio={16 / 9}>
@@ -44,7 +44,7 @@ const EndangeredSpecies = ({navigation}) => {
             <Button
               _text={{fontWeight: 'bold', fontSize: '18'}}
               style={styles.speciesBtn}
-              onPress={() => navigation.navigate('Endangered')}>
+              onPress={() => navigation.navigate('EndangeredPlants')}>
               Plants
             </Button>
           </Box>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {ScrollView, StyleSheet} from 'react-native';
 import MainLayout from '../../components/MainLayout';
 import {
@@ -17,12 +17,52 @@ import {
   Actionsheet,
   Icon,
   Divider,
+  useToast,
 } from 'native-base';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import useRequest from '../../services/RequestContext';
 
 const Endangered = ({route, navigation}) => {
   const {isOpen, onOpen, onClose} = useDisclose();
+  const [species, setSpecies] = useState([]);
+  const [selected, setSelected] = useState();
+  const {request} = useRequest();
+  const toast = useToast();
+  const getAllSpecies = async () => {
+    try {
+      const res = await request.get('EndangeredSpecies');
+      if (res.status === 200) {
+        setSpecies(res.data);
+        console.log('All Species', res.data);
+      }
+    } catch (error) {
+      console.log('error', error);
+    }
+  };
+  useEffect(() => {
+    getAllSpecies();
+    console.log();
+  }, []);
+
+  const onDelete = async () => {
+    const res = await request.delete(`EndangeredSpecies/${selected?._id}`);
+    if (res.status === 200) {
+      toast.show({
+        render: () => {
+          return (
+            <Box bg="red.500" px="2" py="1" rounded="sm" mb={5}>
+              Record Deleted!
+            </Box>
+          );
+        },
+        placement: 'top',
+      });
+      onClose();
+      setSelected(undefined);
+      getAllSpecies().catch(console.error);
+    }
+  };
 
   return (
     <MainLayout>
@@ -36,7 +76,12 @@ const Endangered = ({route, navigation}) => {
           <Pressable>
             <HStack justifyContent="space-between">
               <IconButton
-                onPress={() => navigation.navigate('AddSpecies')}
+                onPress={() =>
+                  navigation.navigate('AddSpecies', {
+                    edit: false,
+                    selectSpecies: undefined,
+                  })
+                }
                 _icon={{
                   as: AntDesign,
                   name: 'plussquare',
@@ -46,61 +91,79 @@ const Endangered = ({route, navigation}) => {
               />
             </HStack>
           </Pressable>
-          <Box
-            m={4}
-            rounded="lg"
-            overflow="hidden"
-            borderColor="coolGray.200"
-            backgroundColor="#fff"
-            borderWidth="1">
-            <Box>
+          {species && (
+            <>
+              {species.map(speciesData => (
+                <Box
+                  key={speciesData._id}
+                  m={4}
+                  rounded="lg"
+                  overflow="hidden"
+                  borderColor="coolGray.200"
+                  backgroundColor="#fff"
+                  borderWidth="1">
+                  <Box>
               <AspectRatio w="100%" ratio={16 / 9}>
                 <Image
                   source={{
-                    uri: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Monachus_schauinslandi.jpg/800px-Monachus_schauinslandi.jpg',
-                  }}
-                  alt="image"
-                />
-              </AspectRatio>
-            </Box>
-            <Stack p={4} space={3}>
-              <Box>
-                <Stack space={2}>
-                  <Heading size="lg" ml="-1">
-                    Hawaiian Monk Seal
-                  </Heading>
-                </Stack>
-                <Text fontWeight="400" fontStyle="italic">
-                  Monachus schauinslandi
-                </Text>
-              </Box>
-              <HStack my={2} justifyContent="space-between" alignItems="center">
-                <Box>
-                  <Text fontWeight="400">11-09-2022</Text>
+                    uri: `${speciesData.imageURL}`,
+                        }}
+                        alt="image"
+                      />
+                    </AspectRatio>
+                  </Box>
+                  <Stack p={4} space={3}>
+                    <Box>
+                      <Stack space={2}>
+                        <Heading size="lg" ml="-1">
+                          {speciesData.name}
+                        </Heading>
+                      </Stack>
+                      <Text fontWeight="400" fontStyle="italic">
+                        {speciesData.scientificName}
+                      </Text>
+                    </Box>
+                    <HStack
+                      my={2}
+                      justifyContent="space-between"
+                      alignItems="center">
+                      <Box>
+                        <Text fontWeight="400">11-09-2022</Text>
+                      </Box>
+                      <HStack justifyContent="space-between">
+                        <IconButton
+                          onPress={() => {
+                            navigation.navigate('AddSpecies', {
+                              edit: true,
+                              selectSpecies: speciesData,
+                            });
+                          }}
+                          _icon={{
+                            as: MaterialIcons,
+                            name: 'remove-red-eye',
+                            color: '#091540',
+                            size: 'lg',
+                          }}
+                        />
+                        <IconButton
+                          onPress={() => {
+                            setSelected(speciesData);
+                            onOpen();
+                          }}
+                          _icon={{
+                            as: MaterialIcons,
+                            name: 'delete',
+                            color: '#FF0000',
+                            size: 'lg',
+                          }}
+                        />
+                      </HStack>
+                    </HStack>
+                  </Stack>
                 </Box>
-                <HStack justifyContent="space-between">
-                  <IconButton
-                    onPress={() => navigation.navigate('AddSpecies')}
-                    _icon={{
-                      as: MaterialIcons,
-                      name: 'remove-red-eye',
-                      color: '#091540',
-                      size: 'lg',
-                    }}
-                  />
-                  <IconButton
-                    onPress={onOpen}
-                    _icon={{
-                      as: MaterialIcons,
-                      name: 'delete',
-                      color: '#FF0000',
-                      size: 'lg',
-                    }}
-                  />
-                </HStack>
-              </HStack>
-            </Stack>
-          </Box>
+              ))}
+            </>
+          )}
           <Actionsheet isOpen={isOpen} onClose={onClose}>
             <Actionsheet.Content>
               <Box w="100%" h={60} px={4} justifyContent="center">
@@ -123,7 +186,10 @@ const Endangered = ({route, navigation}) => {
               <HStack>
                 <Box>
                   <Actionsheet.Item>
-                    <Button borderRadius="full" style={styles.deleteBtn}>
+                    <Button
+                      onPress={onDelete}
+                      borderRadius="full"
+                      style={styles.deleteBtn}>
                       <Text color="#fff" fontWeight="bold">
                         Delete
                       </Text>

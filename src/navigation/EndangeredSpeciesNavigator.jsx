@@ -7,6 +7,7 @@ import AddSpecies from '../screens/EndangeredSpecies/AddSpecies';
 import MyRecords from '../screens/EndangeredSpecies/MyRecords';
 import {Box, IconButton} from 'native-base';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import EndangeredPlants from '../screens/EndangeredSpecies/EndangeredPlants';
 
 export const HeaderLeft = ({navigation}) => {
   return (
@@ -50,7 +51,17 @@ const EndangeredSpeciesNavigator = () => {
         component={Endangered}
         options={navigation => {
           return {
-            title: 'Endangered Species',
+            title: 'Endangered Animals',
+            headerTitleAlign: 'center',
+          };
+        }}
+      />
+      <EndangeredStack.Screen
+        name="EndangeredPlants"
+        component={EndangeredPlants}
+        options={navigation => {
+          return {
+            title: 'Endangered Plants',
             headerTitleAlign: 'center',
           };
         }}
