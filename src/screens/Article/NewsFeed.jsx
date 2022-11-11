@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {ScrollView, StyleSheet} from 'react-native';
+import {ScrollView, StyleSheet, Text as DescriptionText} from 'react-native';
 import MainLayout from '../../components/MainLayout';
 import {
   AspectRatio,
@@ -69,7 +69,12 @@ const NewsFeed = ({navigation}) => {
                         {item.title}
                       </Heading>
                     </Stack>
-                    <Text fontWeight="400">{item.description}</Text>
+                    <DescriptionText
+                      style={{width: 320, fontWeight: '600', color: '#000'}}
+                      numberOfLines={5}
+                      ellipsizeMode={'tail'}>
+                      {item.description}
+                    </DescriptionText>
                     <HStack
                       my={2}
                       justifyContent="space-between"

@@ -33,7 +33,9 @@ const HeaderRight = ({navigation}) => {
           color: '#fff',
           size: 'lg',
         }}
-        onPress={() => navigation.navigate('AddArticle')}
+        onPress={() =>
+          navigation.navigate('AddArticle', {edit: false, article: null})
+        }
       />
     </Box>
   );
