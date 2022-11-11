@@ -32,7 +32,8 @@ const ResourceNavigator = () => {
         headerStyle: {backgroundColor: '#0096C7'},
         headerShadowVisible: false,
         headerTintColor: '#fff',
-      }}>
+      }}
+    >
       <ResourceStack.Screen
         name="Resources"
         component={Resources}
@@ -50,7 +51,7 @@ const ResourceNavigator = () => {
         component={ResourceCat}
         options={navigation => {
           return {
-            title: 'ResourceCat',
+            title: 'Resource',
             headerTitleAlign: 'center',
           };
         }}

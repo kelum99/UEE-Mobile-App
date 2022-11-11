@@ -44,7 +44,8 @@ const Read = ({route}) => {
                 <AspectRatio w="100%" ratio={16 / 9}>
                   <Image
                     source={{
-                      uri: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Monachus_schauinslandi.jpg/800px-Monachus_schauinslandi.jpg',
+                      uri:
+                        'https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Monachus_schauinslandi.jpg/800px-Monachus_schauinslandi.jpg',
                     }}
                     alt="image"
                   />
@@ -54,7 +55,7 @@ const Read = ({route}) => {
                 <VStack my={4}>
                   <Center>
                     <Heading>{resources.name}</Heading>
-                    <Text fontStyle="italic">{resources.scientificName}</Text>
+                    <Text fontStyle="italic">{resources.authorName}</Text>
                   </Center>
                 </VStack>
                 <VStack my={3} mx={4}>
@@ -63,10 +64,6 @@ const Read = ({route}) => {
                 <VStack mx={4} my={4}>
                   <HStack justifyContent="space-between">
                     <Text fontWeight="600">{resources.addedBy}</Text>
-                    <Text fontWeight="600">
-                      {' '}
-                      {moment(resourcesData.addedDate).format('YYYY-MM-DD')}
-                    </Text>
                   </HStack>
                 </VStack>
               </Box>

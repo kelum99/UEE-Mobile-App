@@ -1,5 +1,5 @@
 {
-  "name": "oceanic",
+  "name": "yes",
   "version": "0.0.1",
   "private": true,
   "scripts": {
@@ -43,5 +43,9 @@
   },
   "jest": {
     "preset": "react-native"
-  }
+  },
+  "main": "index.js",
+  "repository": "https://github.com/kelum99/UEE-Mobile-App.git",
+  "author": "manushi47 <manushishavindya@gmail.com>",
+  "license": "MIT"
 }
