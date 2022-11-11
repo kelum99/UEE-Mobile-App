@@ -10,7 +10,7 @@ import {
   Image,
   Input,
   Progress,
-  Stack,
+  Text,
   TextArea,
   useToast,
   VStack,
@@ -54,7 +54,6 @@ const AddResources = ({navigation}) => {
         console.log(response.errorMessage);
       }
       if (response.assets) {
-        console.log('rrr', response.assets);
         setUploaded(false);
         setImage(response.assets[0].uri);
       }
@@ -65,9 +64,7 @@ const AddResources = ({navigation}) => {
     const filename = image.substring(image.lastIndexOf('/') + 1);
     setUploading(true);
     setTransferred(0);
-    const task = storage()
-      .ref(filename)
-      .putFile(image);
+    const task = storage().ref(filename).putFile(image);
     task.on('state_changed', snapshot => {
       setTransferred(
         Math.round(snapshot.bytesTransferred / snapshot.totalBytes) * 10000,
@@ -94,13 +91,13 @@ const AddResources = ({navigation}) => {
           render: () => {
             return (
               <Box bg="emerald.500" px="2" py="1" rounded="sm" mb={5}>
-                Article Submitted!
+                Resources Added!
               </Box>
             );
           },
           placement: 'top',
         });
-        navigation.navigate('Records');
+        navigation.navigate('ResourceCat');
       } else {
         toast.show({
           render: () => {
@@ -125,8 +122,7 @@ const AddResources = ({navigation}) => {
           <Center>
             <FormControl isRequired my={2}>
               <FormControl.Label
-                _text={{fontWeight: 'bold', fontSize: 18, color: '#fff'}}
-              >
+                _text={{fontWeight: 'bold', fontSize: 18, color: '#fff'}}>
                 Title
               </FormControl.Label>
               <Input
@@ -142,8 +138,7 @@ const AddResources = ({navigation}) => {
           <Center>
             <FormControl isRequired my={2}>
               <FormControl.Label
-                _text={{fontWeight: 'bold', fontSize: 18, color: '#fff'}}
-              >
+                _text={{fontWeight: 'bold', fontSize: 18, color: '#fff'}}>
                 Description
               </FormControl.Label>
               <TextArea
@@ -159,8 +154,7 @@ const AddResources = ({navigation}) => {
           <Center>
             <FormControl isRequired my={2}>
               <FormControl.Label
-                _text={{fontWeight: 'bold', fontSize: 18, color: '#fff'}}
-              >
+                _text={{fontWeight: 'bold', fontSize: 18, color: '#fff'}}>
                 Added By
               </FormControl.Label>
               <Input
@@ -183,8 +177,12 @@ const AddResources = ({navigation}) => {
               }}
             />
           )}
-
-          <HStack my={3} mr={3} justifyContent="space-between">
+          {uploaded && (
+            <Text fontWeight="600" mt={2} color="#fff">
+              Upload Success
+            </Text>
+          )}
+          <HStack my={3} mx={3} justifyContent="space-between">
             {image ? (
               <AspectRatio w="68%" ratio={16 / 9}>
                 <Image alt="image" source={{uri: image}} />
@@ -194,8 +192,7 @@ const AddResources = ({navigation}) => {
                 <Image
                   alt="image"
                   source={{
-                    uri:
-                      'https://www.libreriaalberti.com/static/img/no-preview.jpg',
+                    uri: 'https://www.libreriaalberti.com/static/img/no-preview.jpg',
                   }}
                 />
               </AspectRatio>
@@ -218,8 +215,7 @@ const AddResources = ({navigation}) => {
               onPress={onSubmit}
               mt="5"
               backgroundColor="#091540"
-              _text={{fontWeight: 'bold', fontSize: 16, color: '#fff'}}
-            >
+              _text={{fontWeight: 'bold', fontSize: 16, color: '#fff'}}>
               Submit
             </Button>
             <Button
@@ -227,8 +223,7 @@ const AddResources = ({navigation}) => {
               mt="5"
               backgroundColor="transparent"
               _text={{fontWeight: 'bold', fontSize: 16, color: '#091540'}}
-              borderColor="#091540"
-            >
+              borderColor="#091540">
               Cancel
             </Button>
           </HStack>

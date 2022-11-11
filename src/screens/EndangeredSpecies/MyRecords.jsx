@@ -31,8 +31,7 @@ const Endangered = ({route, navigation}) => {
         contentContainerStyle={{
           alignItems: 'center',
           justifyContent: 'center',
-        }}
-      >
+        }}>
         <Box>
           <Pressable>
             <HStack justifyContent="space-between">
@@ -53,14 +52,12 @@ const Endangered = ({route, navigation}) => {
             overflow="hidden"
             borderColor="coolGray.200"
             backgroundColor="#fff"
-            borderWidth="1"
-          >
+            borderWidth="1">
             <Box>
               <AspectRatio w="100%" ratio={16 / 9}>
                 <Image
                   source={{
-                    uri:
-                      'https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Monachus_schauinslandi.jpg/800px-Monachus_schauinslandi.jpg',
+                    uri: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Monachus_schauinslandi.jpg/800px-Monachus_schauinslandi.jpg',
                   }}
                   alt="image"
                 />
@@ -139,8 +136,7 @@ const Endangered = ({route, navigation}) => {
                       onPress={onClose}
                       borderRadius="full"
                       variant="outline"
-                      style={styles.cancelBtn}
-                    >
+                      style={styles.cancelBtn}>
                       <Text color="#091540" fontWeight="bold">
                         Cancel
                       </Text>

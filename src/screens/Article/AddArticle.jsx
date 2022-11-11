@@ -78,9 +78,7 @@ const AddArticle = ({navigation, route}) => {
     const filename = image.substring(image.lastIndexOf('/') + 1);
     setUploading(true);
     setTransferred(0);
-    const task = storage()
-      .ref(filename)
-      .putFile(image);
+    const task = storage().ref(filename).putFile(image);
     task.on('state_changed', snapshot => {
       setTransferred(
         Math.round(snapshot.bytesTransferred / snapshot.totalBytes) * 10000,
@@ -94,9 +92,9 @@ const AddArticle = ({navigation, route}) => {
     const imgRef = await storage().ref('/' + filename);
     if (imgRef) {
       imgRef.getDownloadURL().then(url => setData({...data, img: url}));
+      setUploading(false);
+      setUploaded(true);
     }
-    setUploading(false);
-    setUploaded(true);
   };
 
   const onSubmit = async () => {

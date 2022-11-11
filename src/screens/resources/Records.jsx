@@ -1,11 +1,10 @@
-import React from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {ScrollView, StyleSheet} from 'react-native';
 import MainLayout from '../../components/MainLayout';
 import {
   AspectRatio,
   Box,
   Button,
-  Center,
   Heading,
   HStack,
   Image,
@@ -17,13 +16,54 @@ import {
   Actionsheet,
   Icon,
   Divider,
+  useToast,
 } from 'native-base';
-import AntDesign from 'react-native-vector-icons/AntDesign';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import useRequest from '../../services/RequestContext';
+import moment from 'moment';
 
 const Records = ({route, navigation}) => {
   const {isOpen, onOpen, onClose} = useDisclose();
+  const [data, setData] = useState();
+  const [selected, setSelected] = useState();
+  const {request} = useRequest();
+  const toast = useToast();
 
+  const getAllResources = useCallback(async () => {
+    const res = await request.get('Resources');
+    if (res.status === 200) {
+      setData(res.data);
+    }
+  }, [request]);
+
+  const onDelete = async () => {
+    const res = await request.delete(`Resources/${selected._id}`);
+    if (res) {
+      setSelected(undefined);
+      getAllResources().catch(console.error);
+      onClose();
+      toast.show({
+        render: () => {
+          return (
+            <Box
+              _text={{color: '#fff'}}
+              bg="red.500"
+              px="2"
+              py="1"
+              rounded="sm"
+              mb={5}>
+              Record Removed!
+            </Box>
+          );
+        },
+        placement: 'top',
+      });
+    }
+  };
+
+  useEffect(() => {
+    getAllResources().catch(console.error);
+  }, [getAllResources]);
   return (
     <MainLayout>
       <ScrollView
@@ -33,75 +73,81 @@ const Records = ({route, navigation}) => {
           justifyContent: 'center',
         }}>
         <Box>
-          <Pressable>
-            <HStack justifyContent="space-between">
-              <IconButton
-                onPress={() => navigation.navigate('AddResources')}
-                _icon={{
-                  as: AntDesign,
-                  name: 'plussquare',
-                  color: '#091540',
-                  size: 'lg',
-                }}
-              />
-            </HStack>
-          </Pressable>
-          <Box
-            m={4}
-            rounded="lg"
-            overflow="hidden"
-            borderColor="coolGray.200"
-            backgroundColor="#fff"
-            borderWidth="1">
-            <Box>
-              <AspectRatio w="100%" ratio={16 / 9}>
-                <Image
-                  source={{
-                    uri: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Monachus_schauinslandi.jpg/800px-Monachus_schauinslandi.jpg',
-                  }}
-                  alt="image"
-                />
-              </AspectRatio>
-            </Box>
-            <Stack p={4} space={3}>
-              <Box>
-                <Stack space={2}>
-                  <Heading size="lg" ml="-1">
-                    Hawaiian Monk Seal
-                  </Heading>
-                </Stack>
-                <Text fontWeight="400" fontStyle="italic">
-                  Monachus schauinslandi
-                </Text>
-              </Box>
-              <HStack my={2} justifyContent="space-between" alignItems="center">
+          {data &&
+            data.map(item => (
+              <Box
+                key={item._id}
+                m={4}
+                rounded="lg"
+                overflow="hidden"
+                borderColor="coolGray.200"
+                backgroundColor="#fff"
+                borderWidth="1">
                 <Box>
-                  <Text fontWeight="400">11-09-2022</Text>
+                  <AspectRatio w="100%" ratio={16 / 9}>
+                    <Image
+                      source={{
+                        uri: item.img,
+                      }}
+                      alt="image"
+                    />
+                  </AspectRatio>
                 </Box>
-                <HStack justifyContent="space-between">
-                  <IconButton
-                    onPress={() => navigation.navigate('AddResources')}
-                    _icon={{
-                      as: MaterialIcons,
-                      name: 'remove-red-eye',
-                      color: '#091540',
-                      size: 'lg',
-                    }}
-                  />
-                  <IconButton
-                    onPress={onOpen}
-                    _icon={{
-                      as: MaterialIcons,
-                      name: 'delete',
-                      color: '#FF0000',
-                      size: 'lg',
-                    }}
-                  />
-                </HStack>
-              </HStack>
-            </Stack>
-          </Box>
-          <Actionsheet isOpen={isOpen} onClose={onClose}>
+                <Stack p={4} space={3}>
+                  <Box>
+                    <Stack space={2}>
+                      <Heading size="lg" ml="-1">
+                        {item.title}
+                      </Heading>
+                    </Stack>
+                    <Text fontWeight="400" fontStyle="italic">
+                      {item.description}
+                    </Text>
+                  </Box>
+                  <HStack
+                    my={2}
+                    justifyContent="space-between"
+                    alignItems="center">
+                    <Box>
+                      <Text fontWeight="400">
+                        {moment(item.date).format('YYYY-MM-DD')}
+                      </Text>
+                    </Box>
+                    <HStack justifyContent="space-between">
+                      <IconButton
+                        onPress={() =>
+                          navigation.navigate('ReadRecord', {record: item})
+                        }
+                        _icon={{
+                          as: MaterialIcons,
+                          name: 'remove-red-eye',
+                          color: '#091540',
+                          size: 'lg',
+                        }}
+                      />
+                      <IconButton
+                        onPress={() => {
+                          setSelected(item);
+                          onOpen();
+                        }}
+                        _icon={{
+                          as: MaterialIcons,
+                          name: 'delete',
+                          color: '#FF0000',
+                          size: 'lg',
+                        }}
+                      />
+                    </HStack>
+                  </HStack>
+                </Stack>
+              </Box>
+            ))}
+          <Actionsheet
+            isOpen={isOpen}
+            onClose={() => {
+              setSelected(undefined);
+              onClose();
+            }}>
             <Actionsheet.Content>
               <Box w="100%" h={60} px={4} justifyContent="center">
                 <Text fontSize="16" fontWeight="bold" color="#091540">
@@ -124,7 +170,7 @@ const Records = ({route, navigation}) => {
                 <Box>
                   <Actionsheet.Item>
                     <Button borderRadius="full" style={styles.deleteBtn}>
-                      <Text color="#fff" fontWeight="bold">
+                      <Text color="#fff" fontWeight="bold" onPress={onDelete}>
                         Delete
                       </Text>
                     </Button>
@@ -133,7 +179,10 @@ const Records = ({route, navigation}) => {
                 <Box>
                   <Actionsheet.Item>
                     <Button
-                      onPress={onClose}
+                      onPress={() => {
+                        onClose();
+                        setSelected(undefined);
+                      }}
                       borderRadius="full"
                       variant="outline"
                       style={styles.cancelBtn}>

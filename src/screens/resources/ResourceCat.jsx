@@ -1,5 +1,5 @@
-import React, {useEffect, useState} from 'react';
-import {SafeAreaView, ScrollView, StyleSheet} from 'react-native';
+import React, {useCallback, useEffect, useState} from 'react';
+import {ScrollView, StyleSheet} from 'react-native';
 import MainLayout from '../../components/MainLayout';
 import {
   AspectRatio,
@@ -11,11 +11,26 @@ import {
   Pressable,
   IconButton,
   Text,
+  Stack,
 } from 'native-base';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import moment from 'moment';
+import useRequest from '../../services/RequestContext';
 
 const ResourceCat = ({route, navigation}) => {
+  const [records, setRecords] = useState();
+  const {request} = useRequest();
+
+  const getAllResources = useCallback(async () => {
+    const res = await request.get('Resources');
+    if (res.status === 200) {
+      setRecords(res.data);
+    }
+  }, [request]);
+  useEffect(() => {
+    getAllResources().catch(console.error);
+  }, [getAllResources]);
   return (
     <MainLayout>
       <ScrollView
@@ -49,6 +64,59 @@ const ResourceCat = ({route, navigation}) => {
             </HStack>
           </Pressable>
         </Box>
+        {records &&
+          records.map(item => (
+            <Pressable key={item._id}>
+              <Box
+                m={4}
+                rounded="lg"
+                overflow="hidden"
+                borderColor="coolGray.200"
+                backgroundColor="#fff"
+                borderWidth="1">
+                <Box>
+                  <AspectRatio w="100%" ratio={16 / 9}>
+                    <Image
+                      source={{
+                        uri: item.img,
+                      }}
+                      alt="image"
+                    />
+                  </AspectRatio>
+                </Box>
+                <Stack p={4} space={3}>
+                  <Box>
+                    <Stack space={2}>
+                      <Heading size="lg" ml="-1">
+                        {item.title}
+                      </Heading>
+                    </Stack>
+                  </Box>
+                  <HStack
+                    my={2}
+                    justifyContent="space-between"
+                    alignItems="center">
+                    <Box>
+                      <Text fontWeight="400">{item.addedBy}</Text>
+                      <Text fontWeight="400">
+                        {moment(item.date).format('YYYY-MM-DD')}
+                      </Text>
+                    </Box>
+                    <Button
+                      style={styles.readMoreBtn}
+                      key={item._id}
+                      onPress={() =>
+                        navigation.navigate('ReadRecord', {record: item})
+                      }
+                      _text={{fontWeight: 'bold'}}
+                      size={'sm'}>
+                      Read More
+                    </Button>
+                  </HStack>
+                </Stack>
+              </Box>
+            </Pressable>
+          ))}
       </ScrollView>
     </MainLayout>
   );

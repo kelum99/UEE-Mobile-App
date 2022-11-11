@@ -45,45 +45,45 @@ const EndangeredSpeciesNavigator = () => {
           };
         }}
       />
-     <EndangeredStack.Screen
+      <EndangeredStack.Screen
         name="Endangered"
         component={Endangered}
         options={navigation => {
-        return {
-          title: 'Endangered Species',
-          headerTitleAlign: 'center',
-        };
+          return {
+            title: 'Endangered Species',
+            headerTitleAlign: 'center',
+          };
         }}
-     />
-      <EndangeredStack.Screen
-         name="ReadMore"
-         component={ReadMore}
-         options={navigation => {
-         return {
-           title: ''
-         };
-       }}
       />
       <EndangeredStack.Screen
-         name="AddSpecies"
-         component={AddSpecies}
-         options={navigation => {
-             return {
-               title: 'Add Endangered Species',
-               headerTitleAlign: 'center',
-             };
-             }}
-     />
+        name="ReadMore"
+        component={ReadMore}
+        options={navigation => {
+          return {
+            title: '',
+          };
+        }}
+      />
       <EndangeredStack.Screen
-             name="MyRecords"
-             component={MyRecords}
-             options={navigation => {
-             return {
-               title: 'My Records',
-               headerTitleAlign: 'center',
-             };
-             }}
-     />
+        name="AddSpecies"
+        component={AddSpecies}
+        options={navigation => {
+          return {
+            title: 'Add Endangered Species',
+            headerTitleAlign: 'center',
+          };
+        }}
+      />
+      <EndangeredStack.Screen
+        name="MyRecords"
+        component={MyRecords}
+        options={navigation => {
+          return {
+            title: 'My Records',
+            headerTitleAlign: 'center',
+          };
+        }}
+      />
     </EndangeredStack.Navigator>
   );
 };
