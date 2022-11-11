@@ -46,7 +46,6 @@ const AddArticle = ({navigation, route}) => {
         author: article.author,
         img: article.img,
       });
-      console.log('edit', edit);
     }
   }, [article, edit]);
 
@@ -229,18 +228,24 @@ const AddArticle = ({navigation, route}) => {
             )}
 
             <VStack mx={1}>
-              <Button my={3} onPress={selectImage}>
+              <Button backgroundColor="#091540" my={3} onPress={selectImage}>
                 {uploaded ? 'Change Image' : 'Browse'}
               </Button>
               {!uploaded && (
                 <>
-                  {!uploading && <Button onPress={uploadImage}>Upload</Button>}
+                  {!uploading && (
+                    <Button backgroundColor="#091540" onPress={uploadImage}>
+                      Upload
+                    </Button>
+                  )}
                 </>
               )}
             </VStack>
           </HStack>
           <Center>
-            <Button onPress={edit ? onUpdate : onSubmit}>
+            <Button
+              backgroundColor="#091540"
+              onPress={edit ? onUpdate : onSubmit}>
               {edit ? 'Update Article' : 'Submit Article'}
             </Button>
           </Center>

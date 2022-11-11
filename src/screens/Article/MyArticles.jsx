@@ -111,7 +111,13 @@ const MyArticles = ({navigation}) => {
         <>
           {articles &&
             articles.map(article => (
-              <Box key={article._id} backgroundColor="#fff" p={2} my={1}>
+              <Box
+                key={article._id}
+                backgroundColor="#fff"
+                p={3}
+                my={1}
+                mx={2}
+                rounded="lg">
                 <Pressable
                   onPress={() =>
                     navigation.navigate('Article', {article: article})

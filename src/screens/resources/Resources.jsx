@@ -7,7 +7,8 @@ const Resources = ({navigation}) => {
   return (
     <MainLayout>
       <ScrollView style={{flex: 1}}>
-        <Pressable onPress={() => navigation.navigate('ResourceCat')}>
+        <Pressable
+          onPress={() => navigation.navigate('ResourceCat', {add: false})}>
           <Box m={4} rounded="lg" overflow="hidden" backgroundColor="#fff">
             <Box>
               <AspectRatio w="100%" ratio={16 / 9}>
@@ -22,13 +23,16 @@ const Resources = ({navigation}) => {
             <Box>
               <Button
                 style={styles.speciesBtn}
-                onPress={() => navigation.navigate('ResourceCat')}>
+                onPress={() =>
+                  navigation.navigate('ResourceCat', {add: false})
+                }>
                 Marine Conservation
               </Button>
             </Box>
           </Box>
         </Pressable>
-        <Pressable onPress={() => navigation.navigate('ResourceCat')}>
+        <Pressable
+          onPress={() => navigation.navigate('ResourceCat', {add: false})}>
           <Box m={4} rounded="lg" overflow="hidden" backgroundColor="#fff">
             <Box>
               <AspectRatio w="100%" ratio={16 / 9}>

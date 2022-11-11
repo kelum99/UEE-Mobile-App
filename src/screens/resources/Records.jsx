@@ -8,7 +8,6 @@ import {
   Heading,
   HStack,
   Image,
-  Pressable,
   Stack,
   Text,
   IconButton,
@@ -17,6 +16,7 @@ import {
   Icon,
   Divider,
   useToast,
+  Spinner,
 } from 'native-base';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import useRequest from '../../services/RequestContext';
@@ -26,13 +26,17 @@ const Records = ({route, navigation}) => {
   const {isOpen, onOpen, onClose} = useDisclose();
   const [data, setData] = useState();
   const [selected, setSelected] = useState();
+  const [loading, setLoading] = useState(false);
   const {request} = useRequest();
   const toast = useToast();
+  const {updated} = route.params;
 
   const getAllResources = useCallback(async () => {
+    setLoading(true);
     const res = await request.get('Resources');
     if (res.status === 200) {
       setData(res.data);
+      setLoading(false);
     }
   }, [request]);
 
@@ -63,140 +67,149 @@ const Records = ({route, navigation}) => {
 
   useEffect(() => {
     getAllResources().catch(console.error);
-  }, [getAllResources]);
+  }, [getAllResources, updated]);
   return (
     <MainLayout>
-      <ScrollView
-        style={{flex: 1}}
-        contentContainerStyle={{
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}>
-        <Box>
-          {data &&
-            data.map(item => (
-              <Box
-                key={item._id}
-                m={4}
-                rounded="lg"
-                overflow="hidden"
-                borderColor="coolGray.200"
-                backgroundColor="#fff"
-                borderWidth="1">
-                <Box>
-                  <AspectRatio w="100%" ratio={16 / 9}>
-                    <Image
-                      source={{
-                        uri: item.img,
-                      }}
-                      alt="image"
-                    />
-                  </AspectRatio>
-                </Box>
-                <Stack p={4} space={3}>
+      {loading ? (
+        <Box flex={1} justifyContent="center" alignItems="center">
+          <Spinner size={'lg'} color="#fff" />
+        </Box>
+      ) : (
+        <ScrollView
+          style={{flex: 1}}
+          contentContainerStyle={{
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}>
+          <Box>
+            {data &&
+              data.map(item => (
+                <Box
+                  key={item._id}
+                  m={4}
+                  rounded="lg"
+                  overflow="hidden"
+                  borderColor="coolGray.200"
+                  backgroundColor="#fff"
+                  borderWidth="1">
                   <Box>
-                    <Stack space={2}>
-                      <Heading size="lg" ml="-1">
-                        {item.title}
-                      </Heading>
-                    </Stack>
-                    <Text fontWeight="400" fontStyle="italic">
-                      {item.description}
-                    </Text>
+                    <AspectRatio w="100%" ratio={16 / 9}>
+                      <Image
+                        source={{
+                          uri: item.img,
+                        }}
+                        alt="image"
+                      />
+                    </AspectRatio>
                   </Box>
-                  <HStack
-                    my={2}
-                    justifyContent="space-between"
-                    alignItems="center">
+                  <Stack p={4} space={3}>
                     <Box>
-                      <Text fontWeight="400">
-                        {moment(item.date).format('YYYY-MM-DD')}
+                      <Stack space={2}>
+                        <Heading size="lg" ml="-1">
+                          {item.title}
+                        </Heading>
+                      </Stack>
+                      <Text fontWeight="400" fontStyle="italic">
+                        {item.description}
                       </Text>
                     </Box>
-                    <HStack justifyContent="space-between">
-                      <IconButton
-                        onPress={() =>
-                          navigation.navigate('ReadRecord', {record: item})
-                        }
-                        _icon={{
-                          as: MaterialIcons,
-                          name: 'remove-red-eye',
-                          color: '#091540',
-                          size: 'lg',
-                        }}
-                      />
-                      <IconButton
-                        onPress={() => {
-                          setSelected(item);
-                          onOpen();
-                        }}
-                        _icon={{
-                          as: MaterialIcons,
-                          name: 'delete',
-                          color: '#FF0000',
-                          size: 'lg',
-                        }}
-                      />
+                    <HStack
+                      my={2}
+                      justifyContent="space-between"
+                      alignItems="center">
+                      <Box>
+                        <Text fontWeight="400">
+                          {moment(item.date).format('YYYY-MM-DD')}
+                        </Text>
+                      </Box>
+                      <HStack justifyContent="space-between">
+                        <IconButton
+                          onPress={() =>
+                            navigation.navigate('AddResources', {
+                              record: item,
+                              edit: true,
+                            })
+                          }
+                          _icon={{
+                            as: MaterialIcons,
+                            name: 'remove-red-eye',
+                            color: '#091540',
+                            size: 'lg',
+                          }}
+                        />
+                        <IconButton
+                          onPress={() => {
+                            setSelected(item);
+                            onOpen();
+                          }}
+                          _icon={{
+                            as: MaterialIcons,
+                            name: 'delete',
+                            color: '#FF0000',
+                            size: 'lg',
+                          }}
+                        />
+                      </HStack>
                     </HStack>
-                  </HStack>
-                </Stack>
-              </Box>
-            ))}
-          <Actionsheet
-            isOpen={isOpen}
-            onClose={() => {
-              setSelected(undefined);
-              onClose();
-            }}>
-            <Actionsheet.Content>
-              <Box w="100%" h={60} px={4} justifyContent="center">
-                <Text fontSize="16" fontWeight="bold" color="#091540">
-                  DELETE RECORD
+                  </Stack>
+                </Box>
+              ))}
+            <Actionsheet
+              isOpen={isOpen}
+              onClose={() => {
+                setSelected(undefined);
+                onClose();
+              }}>
+              <Actionsheet.Content>
+                <Box w="100%" h={60} px={4} justifyContent="center">
+                  <Text fontSize="16" fontWeight="bold" color="#091540">
+                    DELETE RECORD
+                  </Text>
+                </Box>
+                <Divider />
+                <Box style={styles.iconContainer}>
+                  <Icon
+                    as={MaterialIcons}
+                    name={'delete'}
+                    size="10"
+                    color="#091540"
+                  />
+                </Box>
+                <Text fontSize="14" color="#091540">
+                  Are You Sure You Want to Delete this Record?
                 </Text>
-              </Box>
-              <Divider />
-              <Box style={styles.iconContainer}>
-                <Icon
-                  as={MaterialIcons}
-                  name={'delete'}
-                  size="10"
-                  color="#091540"
-                />
-              </Box>
-              <Text fontSize="14" color="#091540">
-                Are You Sure You Want to Delete this Record?
-              </Text>
-              <HStack>
-                <Box>
-                  <Actionsheet.Item>
-                    <Button borderRadius="full" style={styles.deleteBtn}>
-                      <Text color="#fff" fontWeight="bold" onPress={onDelete}>
-                        Delete
-                      </Text>
-                    </Button>
-                  </Actionsheet.Item>
-                </Box>
-                <Box>
-                  <Actionsheet.Item>
-                    <Button
-                      onPress={() => {
-                        onClose();
-                        setSelected(undefined);
-                      }}
-                      borderRadius="full"
-                      variant="outline"
-                      style={styles.cancelBtn}>
-                      <Text color="#091540" fontWeight="bold">
-                        Cancel
-                      </Text>
-                    </Button>
-                  </Actionsheet.Item>
-                </Box>
-              </HStack>
-            </Actionsheet.Content>
-          </Actionsheet>
-        </Box>
-      </ScrollView>
+                <HStack>
+                  <Box>
+                    <Actionsheet.Item>
+                      <Button borderRadius="full" style={styles.deleteBtn}>
+                        <Text color="#fff" fontWeight="bold" onPress={onDelete}>
+                          Delete
+                        </Text>
+                      </Button>
+                    </Actionsheet.Item>
+                  </Box>
+                  <Box>
+                    <Actionsheet.Item>
+                      <Button
+                        onPress={() => {
+                          onClose();
+                          setSelected(undefined);
+                        }}
+                        borderRadius="full"
+                        variant="outline"
+                        style={styles.cancelBtn}>
+                        <Text color="#091540" fontWeight="bold">
+                          Cancel
+                        </Text>
+                      </Button>
+                    </Actionsheet.Item>
+                  </Box>
+                </HStack>
+              </Actionsheet.Content>
+            </Actionsheet>
+          </Box>
+        </ScrollView>
+      )}
     </MainLayout>
   );
 };

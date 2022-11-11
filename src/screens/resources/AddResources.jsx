@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import MainLayout from '../../components/MainLayout';
 import {
   AspectRatio,
@@ -20,7 +20,8 @@ import {launchImageLibrary} from 'react-native-image-picker';
 import storage from '@react-native-firebase/storage';
 import useRequest from '../../services/RequestContext';
 
-const AddResources = ({navigation}) => {
+const AddResources = ({navigation, route}) => {
+  const {edit, record} = route.params;
   const [image, setImage] = useState(null);
   const [data, setData] = useState({
     title: '',
@@ -35,6 +36,18 @@ const AddResources = ({navigation}) => {
 
   const {request} = useRequest();
   const toast = useToast();
+
+  useEffect(() => {
+    if (edit && record) {
+      setUploaded(true);
+      setData({
+        title: record.title,
+        description: record.description,
+        addedBy: record.addedBy,
+        img: record.img,
+      });
+    }
+  }, [record, edit]);
 
   const selectImage = async () => {
     const options = {
@@ -90,14 +103,20 @@ const AddResources = ({navigation}) => {
         toast.show({
           render: () => {
             return (
-              <Box bg="emerald.500" px="2" py="1" rounded="sm" mb={5}>
+              <Box
+                _text={{color: '#fff'}}
+                bg="emerald.500"
+                px="2"
+                py="1"
+                rounded="sm"
+                mb={5}>
                 Resources Added!
               </Box>
             );
           },
           placement: 'top',
         });
-        navigation.navigate('ResourceCat');
+        navigation.navigate('ResourceCat', {add: true});
       } else {
         toast.show({
           render: () => {
@@ -115,6 +134,27 @@ const AddResources = ({navigation}) => {
     }
   };
 
+  const onUpdate = async () => {
+    try {
+      const res = await request.put(`Resources/${record._id}`, data);
+      if (res.status === 200) {
+        toast.show({
+          render: () => {
+            return (
+              <Box bg="emerald.500" px="2" py="1" rounded="sm" mb={5}>
+                Record Updated!
+              </Box>
+            );
+          },
+          placement: 'top',
+        });
+        navigation.navigate('Records', {updated: true});
+      }
+    } catch (e) {
+      console.log('error', e);
+    }
+  };
+
   return (
     <MainLayout>
       <ScrollView style={{flex: 1}}>
@@ -126,6 +166,7 @@ const AddResources = ({navigation}) => {
                 Title
               </FormControl.Label>
               <Input
+                defaultValue={edit ? record.title : ''}
                 onChangeText={text => setData({...data, title: text})}
                 fontSize={14}
                 width="350"
@@ -142,9 +183,10 @@ const AddResources = ({navigation}) => {
                 Description
               </FormControl.Label>
               <TextArea
+                defaultValue={edit ? record.description : ''}
                 onChangeText={text => setData({...data, description: text})}
                 fontSize={14}
-                h={20}
+                h={40}
                 placeholder="Enter Description"
                 w="350"
                 backgroundColor="#fff"
@@ -158,6 +200,7 @@ const AddResources = ({navigation}) => {
                 Added By
               </FormControl.Label>
               <Input
+                defaultValue={edit ? record.title : ''}
                 onChangeText={text => setData({...data, addedBy: text})}
                 fontSize={14}
                 width="350"
@@ -169,12 +212,9 @@ const AddResources = ({navigation}) => {
           {uploading && (
             <Progress
               mt={2}
+              width={300}
+              colorScheme="emerald"
               value={transferred}
-              mx="3"
-              bg="#fff"
-              _filledTrack={{
-                bg: 'lime.500',
-              }}
             />
           )}
           {uploaded && (
@@ -192,7 +232,9 @@ const AddResources = ({navigation}) => {
                 <Image
                   alt="image"
                   source={{
-                    uri: 'https://www.libreriaalberti.com/static/img/no-preview.jpg',
+                    uri: edit
+                      ? record.img
+                      : 'https://www.libreriaalberti.com/static/img/no-preview.jpg',
                   }}
                 />
               </AspectRatio>
@@ -212,11 +254,11 @@ const AddResources = ({navigation}) => {
 
           <HStack space={10} justifyContent="center">
             <Button
-              onPress={onSubmit}
+              onPress={edit ? onUpdate : onSubmit}
               mt="5"
               backgroundColor="#091540"
               _text={{fontWeight: 'bold', fontSize: 16, color: '#fff'}}>
-              Submit
+              {edit ? 'Update' : 'Submit'}
             </Button>
             <Button
               variant="outline"
