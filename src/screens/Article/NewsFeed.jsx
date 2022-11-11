@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {ScrollView, StyleSheet} from 'react-native';
+import {ScrollView, StyleSheet, Text as DescriptionText} from 'react-native';
 import MainLayout from '../../components/MainLayout';
 import {
   AspectRatio,
@@ -42,58 +42,65 @@ const NewsFeed = ({navigation}) => {
         }}>
         {articles.length > 0 && (
           <>
-            {articles.map(item => (
-              <Box
-                key={item._id}
-                m={4}
-                rounded="lg"
-                overflow="hidden"
-                borderColor="coolGray.200"
-                backgroundColor="#fff"
-                borderWidth="1">
-                <Box>
-                  <AspectRatio w="100%" ratio={16 / 9}>
-                    <Image
-                      source={{
-                        uri: `${item.img}`,
-                      }}
-                      alt="image"
-                    />
-                  </AspectRatio>
-                </Box>
-                <Stack p={4} space={3}>
-                  <Stack space={2}>
-                    <Heading size="lg" ml="-1">
-                      {item.title}
-                    </Heading>
+            {articles
+              .filter(val => val.status === 'Published')
+              .map(item => (
+                <Box
+                  key={item._id}
+                  m={4}
+                  rounded="lg"
+                  overflow="hidden"
+                  borderColor="coolGray.200"
+                  backgroundColor="#fff"
+                  borderWidth="1">
+                  <Box>
+                    <AspectRatio w="100%" ratio={16 / 9}>
+                      <Image
+                        source={{
+                          uri: `${item.img}`,
+                        }}
+                        alt="image"
+                      />
+                    </AspectRatio>
+                  </Box>
+                  <Stack p={4} space={3}>
+                    <Stack space={2}>
+                      <Heading size="lg" ml="-1">
+                        {item.title}
+                      </Heading>
+                    </Stack>
+                    <DescriptionText
+                      style={{width: 320, fontWeight: '600', color: '#000'}}
+                      numberOfLines={5}
+                      ellipsizeMode={'tail'}>
+                      {item.description}
+                    </DescriptionText>
+                    <HStack
+                      my={2}
+                      justifyContent="space-between"
+                      alignItems="center">
+                      <VStack>
+                        <Text color="coolGray.600" fontWeight="600">
+                          {item.author}
+                        </Text>
+                        <Text color="coolGray.600" fontWeight="400">
+                          {moment(item.createdDate).format('YYYY-MM-DD')}
+                        </Text>
+                      </VStack>
+                      <Button
+                        onPress={() =>
+                          navigation.navigate('Article', {
+                            article: item,
+                          })
+                        }
+                        _text={{fontWeight: 'bold'}}
+                        size={'sm'}>
+                        Read More
+                      </Button>
+                    </HStack>
                   </Stack>
-                  <Text fontWeight="400">{item.description}</Text>
-                  <HStack
-                    my={2}
-                    justifyContent="space-between"
-                    alignItems="center">
-                    <VStack>
-                      <Text color="coolGray.600" fontWeight="600">
-                        {item.author}
-                      </Text>
-                      <Text color="coolGray.600" fontWeight="400">
-                        {moment(item.createdDate).format('YYYY-MM-DD')}
-                      </Text>
-                    </VStack>
-                    <Button
-                      onPress={() =>
-                        navigation.navigate('Article', {
-                          article: item,
-                        })
-                      }
-                      _text={{fontWeight: 'bold'}}
-                      size={'sm'}>
-                      Read More
-                    </Button>
-                  </HStack>
-                </Stack>
-              </Box>
-            ))}
+                </Box>
+              ))}
           </>
         )}
       </ScrollView>

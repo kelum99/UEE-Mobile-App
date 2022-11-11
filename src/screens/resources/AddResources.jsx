@@ -134,7 +134,7 @@ const AddResources = ({navigation}) => {
                 fontSize={14}
                 width="350"
                 variant="outline"
-                placeholder="Enter Author Name"
+                placeholder="Enter Title"
                 backgroundColor="#fff"
               />
             </FormControl>

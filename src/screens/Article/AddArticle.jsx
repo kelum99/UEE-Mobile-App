@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import MainLayout from '../../components/MainLayout';
 import {
   AspectRatio,
@@ -11,6 +11,7 @@ import {
   Input,
   Progress,
   Stack,
+  Text,
   TextArea,
   useToast,
   VStack,
@@ -20,7 +21,7 @@ import {launchImageLibrary} from 'react-native-image-picker';
 import storage from '@react-native-firebase/storage';
 import useRequest from '../../services/RequestContext';
 
-const AddArticle = ({navigation}) => {
+const AddArticle = ({navigation, route}) => {
   const [image, setImage] = useState(null);
   const [data, setData] = useState({
     title: '',
@@ -33,7 +34,21 @@ const AddArticle = ({navigation}) => {
   const [transferred, setTransferred] = useState(0);
 
   const {request} = useRequest();
+  const {edit, article} = route.params;
   const toast = useToast();
+
+  useEffect(() => {
+    if (edit && article) {
+      setUploaded(true);
+      setData({
+        title: article.title,
+        description: article.description,
+        author: article.author,
+        img: article.img,
+      });
+      console.log('edit', edit);
+    }
+  }, [article, edit]);
 
   const selectImage = async () => {
     const options = {
@@ -53,7 +68,6 @@ const AddArticle = ({navigation}) => {
         console.log(response.errorMessage);
       }
       if (response.assets) {
-        console.log('rrr', response.assets);
         setUploaded(false);
         setImage(response.assets[0].uri);
       }
@@ -99,7 +113,7 @@ const AddArticle = ({navigation}) => {
           },
           placement: 'top',
         });
-        navigation.navigate('MyArticles');
+        navigation.reset({index: 0, routes: [{name: 'MyArticles'}]});
       } else {
         toast.show({
           render: () => {
@@ -117,6 +131,30 @@ const AddArticle = ({navigation}) => {
     }
   };
 
+  const onUpdate = async () => {
+    try {
+      const res = await request.put(`Articles/${article._id}`, {
+        ...data,
+        status: article.status,
+      });
+      if (res.status === 200) {
+        toast.show({
+          render: () => {
+            return (
+              <Box bg="emerald.500" px="2" py="1" rounded="sm" mb={5}>
+                Article Updated!
+              </Box>
+            );
+          },
+          placement: 'top',
+        });
+        navigation.reset({index: 0, routes: [{name: 'MyArticles'}]});
+      }
+    } catch (e) {
+      console.log('error', e);
+    }
+  };
+
   return (
     <MainLayout>
       <ScrollView style={{flex: 1}}>
@@ -126,6 +164,7 @@ const AddArticle = ({navigation}) => {
               Title
             </FormControl.Label>
             <Input
+              defaultValue={edit ? article.title : ''}
               onChangeText={text => setData({...data, title: text})}
               style={Styles.input}
               variant="outline"
@@ -137,6 +176,7 @@ const AddArticle = ({navigation}) => {
               Author(s)
             </FormControl.Label>
             <Input
+              defaultValue={edit ? article.author : ''}
               onChangeText={text => setData({...data, author: text})}
               style={Styles.input}
               variant="outline"
@@ -148,6 +188,7 @@ const AddArticle = ({navigation}) => {
               Description
             </FormControl.Label>
             <TextArea
+              defaultValue={edit ? article.description : ''}
               onChangeText={text => setData({...data, description: text})}
               style={Styles.input}
               variant="outline"
@@ -166,6 +207,11 @@ const AddArticle = ({navigation}) => {
               }}
             />
           )}
+          {uploaded && (
+            <Text fontWeight="600" mt={2} color="#fff">
+              Upload Success
+            </Text>
+          )}
           <HStack my={3} mr={3} justifyContent="space-between">
             {image ? (
               <AspectRatio w="68%" ratio={16 / 9}>
@@ -176,8 +222,9 @@ const AddArticle = ({navigation}) => {
                 <Image
                   alt="image"
                   source={{
-                    uri:
-                      'https://www.libreriaalberti.com/static/img/no-preview.jpg',
+                    uri: edit
+                      ? article.img
+                      : 'https://www.libreriaalberti.com/static/img/no-preview.jpg',
                   }}
                 />
               </AspectRatio>
@@ -195,7 +242,9 @@ const AddArticle = ({navigation}) => {
             </VStack>
           </HStack>
           <Center>
-            <Button onPress={onSubmit}>Submit Article</Button>
+            <Button onPress={edit ? onUpdate : onSubmit}>
+              {edit ? 'Update Article' : 'Submit Article'}
+            </Button>
           </Center>
         </Stack>
       </ScrollView>
