@@ -1,14 +1,17 @@
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {ScrollView, StyleSheet} from 'react-native';
 import MainLayout from '../../components/MainLayout';
 import {Button, Center, Heading, Box} from 'native-base';
-import axios from 'axios';
+import useRequest from '../../services/RequestContext';
 
-const CreateUser = ({navigation}) => {
+const CreateUser = ({navigation, route}) => {
   const [admins, setAdmins] = useState([]);
-  const getAllAdmins = async () => {
+  const {request} = useRequest();
+  const {edit, deleteX} = route.params;
+
+  const getAllAdmins = useCallback(async () => {
     try {
-      const res = await axios.get('http://10.0.2.2:5000/api/Admins');
+      const res = await request.get('Admins/');
       if (res.status === 200) {
         setAdmins(res.data);
         console.log('All Admins', res.data);
@@ -16,12 +19,11 @@ const CreateUser = ({navigation}) => {
     } catch (error) {
       console.log('error', error);
     }
-  };
+  }, [request]);
 
   useEffect(() => {
-    getAllAdmins();
-    console.log();
-  }, []);
+    getAllAdmins().catch(console.error);
+  }, [edit, getAllAdmins, deleteX]);
 
   return (
     <MainLayout>
@@ -32,14 +34,11 @@ const CreateUser = ({navigation}) => {
             {admins && (
               <>
                 {admins.map(adminData => (
-                  <Box>
+                  <Box key={adminData._id}>
                     <Button
                       key={adminData._id}
                       onPress={() =>
-                        navigation.navigate({
-                          name: 'EditAdmin',
-                          params: {adminData},
-                        })
+                        navigation.navigate('EditAdmin', {admin: adminData})
                       }
                       style={styles.adminBtn}
                       borderRadius="full"

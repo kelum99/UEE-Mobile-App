@@ -25,7 +25,7 @@ const CreateAdmin = ({navigation}) => {
 
   const onSubmit = async () => {
     try {
-      const res = await request.post('Admins', data);
+      const res = await request.post('Admins', {...data, role: 'Admin'});
       if (res.status === 201) {
         toast.show({
           render: () => {

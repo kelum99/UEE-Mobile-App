@@ -10,54 +10,46 @@ import {
   HStack,
   Image,
   Input,
-  useDisclose,
   useToast,
 } from 'native-base';
-import axios from 'axios';
 import useRequest from '../../services/RequestContext';
 
 const EditAdmin = ({navigation, route}) => {
-  const [admin, setAdmin] = useState({});
+  const {admin} = route.params;
   const [data, setData] = useState({
     name: '',
     mobile: '',
     email: '',
     password: '',
   });
-  const {edit} = route.params;
   const toast = useToast();
   const {request} = useRequest();
-  const [selected, setSelected] = useState();
-  const {isOpen, onOpen, onClose} = useDisclose();
 
   useEffect(() => {
-    if (edit && admin) {
+    if (admin) {
       setData({
         name: admin.name,
         mobile: admin.mobile,
         email: admin.email,
         password: admin.password,
       });
-      console.log('edit', edit);
     }
-  }, [admin, edit]);
+  }, [admin]);
 
-  const getAdmin = async () => {
-    try {
-      const res = await axios.get(
-        `http://10.0.2.2:5000/api/Admins/${data._id}`,
-      );
-      if (res.status === 200) {
-        setAdmin(res.data);
-      }
-    } catch (error) {
-      console.log('error', error);
-    }
-  };
-
-  useEffect(() => {
-    getAdmin();
-  });
+  // const getAdmin = async () => {
+  //   try {
+  //     const res = await request.get(`Admins/${data._id}`);
+  //     if (res.status === 200) {
+  //       setAdmin(res.data);
+  //     }
+  //   } catch (error) {
+  //     console.log('error', error);
+  //   }
+  // };
+  //
+  // useEffect(() => {
+  //   getAdmin();
+  // });
 
   const onUpdate = async () => {
     try {
@@ -76,8 +68,7 @@ const EditAdmin = ({navigation, route}) => {
           },
           placement: 'top',
         });
-        // eslint-disable-next-line no-undef
-        navigation.reset({index: 0, routes: [(name: 'ViewAdmin')]});
+        navigation.navigate('ViewAdmin', {edit: true, deleteX: false});
       }
     } catch (e) {
       console.log('error', e);
@@ -85,7 +76,7 @@ const EditAdmin = ({navigation, route}) => {
   };
 
   const onDelete = async () => {
-    const res = await request.delete(`Admin/${selected?._id}`);
+    const res = await request.delete(`Admins/${admin._id}`);
     if (res.status === 200) {
       toast.show({
         render: () => {
@@ -97,9 +88,7 @@ const EditAdmin = ({navigation, route}) => {
         },
         placement: 'top',
       });
-      onClose();
-      setSelected(undefined);
-      getAdmin().catch(console.error);
+      navigation.navigate('ViewAdmin', {edit: false, deleteX: true});
     }
   };
 
@@ -143,7 +132,8 @@ const EditAdmin = ({navigation, route}) => {
                   Name
                 </FormControl.Label>
                 <Input
-                  defaultValue={edit ? admin.name : ''}
+                  defaultValue={admin.name}
+                  onChangeText={text => setData({...data, name: text})}
                   fontSize={14}
                   width="350"
                   variant="underlined"
@@ -155,7 +145,8 @@ const EditAdmin = ({navigation, route}) => {
                   Phone Number
                 </FormControl.Label>
                 <Input
-                  defaultValue={edit ? admin.mobile : ''}
+                  onChangeText={text => setData({...data, mobile: text})}
+                  defaultValue={admin.mobile}
                   fontSize={14}
                   width="350"
                   variant="underlined"
@@ -167,7 +158,8 @@ const EditAdmin = ({navigation, route}) => {
                   Email
                 </FormControl.Label>
                 <Input
-                  defaultValue={edit ? admin.email : ''}
+                  onChangeText={text => setData({...data, email: text})}
+                  defaultValue={admin.email}
                   fontSize={14}
                   width="350"
                   variant="underlined"
@@ -179,7 +171,8 @@ const EditAdmin = ({navigation, route}) => {
                   Password
                 </FormControl.Label>
                 <Input
-                  defaultValue={edit ? admin.password : ''}
+                  onChangeText={text => setData({...data, password: text})}
+                  defaultValue={admin.password}
                   fontSize={14}
                   width="350"
                   variant="underlined"
