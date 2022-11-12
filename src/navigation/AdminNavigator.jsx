@@ -45,7 +45,12 @@ const AdminNavigator = () => {
       <AdminStack.Screen
         name="AdminDashboard"
         component={AdminDashboard}
-        options={{title: '', headerShown: false}}
+        options={navigation => {
+          return {
+            title: '',
+            headerTitleAlign: 'center',
+          };
+        }}
       />
       <AdminStack.Screen
         name="CreateAdmin"

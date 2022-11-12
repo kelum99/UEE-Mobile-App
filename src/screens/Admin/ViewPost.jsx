@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import MainLayout from '../../components/MainLayout';
 import {
   AspectRatio,
@@ -12,8 +12,27 @@ import {
   Button,
 } from 'native-base';
 import {StyleSheet} from 'react-native';
+import useRequest from '../../services/RequestContext';
+import moment from 'moment';
 
 const ViewPost = ({route}) => {
+  const [post, setPost] = useState({});
+  const {request} = useRequest();
+  const {selectPost} = route.params;
+  const getPost = async () => {
+    try {
+      const res = await request.get(`Articles/${selectPost._id}`);
+      if (res.status === 200) {
+        setPost(res.data);
+      }
+    } catch (error) {
+      console.log('error', error);
+    }
+  };
+  useEffect(() => {
+    getPost();
+  });
+
   return (
     <MainLayout>
       <ScrollView>
@@ -22,7 +41,7 @@ const ViewPost = ({route}) => {
             <AspectRatio w="100%" ratio={16 / 9}>
               <Image
                 source={{
-                  uri: 'https://hercanberra.com.au/wp-content/uploads/2020/12/beach-summer-walk.jpg',
+                  uri: `${selectPost.img}`,
                 }}
                 alt="image"
               />
@@ -32,28 +51,20 @@ const ViewPost = ({route}) => {
             <VStack my={4}>
               <Center>
                 <Text fontStyle="bold" fontWeight={800} fontSize={15}>
-                  Inflation Reduction Act Passed – NOAA Weighs in on Ocean
-                  Ramifications
+                  {selectPost.title}
                 </Text>
               </Center>
             </VStack>
             <VStack mx={4}>
-              <Text>
-                Over the next five years, the $3.3 billion for NOAA in the
-                Inflation Reduction Act will support Americans to prepare,
-                adapt, and build resilience to weather and climate events;
-                improve supercomputing capacity and research on weather, oceans
-                and climate; strengthen NOAA’s hurricane hunter fleet; and
-                replace aging NOAA facilities. This, in combination with funds
-                NOAA received from Congress through the Bipartisan
-                Infrastructure Law, will further strengthen NOAA’s efforts to
-                build a Climate-Ready Nation.{' '}
-              </Text>
+              <Text>{selectPost.description}</Text>
             </VStack>
             <VStack mx={4} my={4}>
               <HStack justifyContent="space-between">
-                <Text fontWeight="600">15-10-2022</Text>
-                <Text fontWeight="600">Sakuni Perera</Text>
+                <Text fontWeight="600">
+                  {' '}
+                  {moment(post.createdDate).format('YYYY-MM-DD')}
+                </Text>
+                <Text fontWeight="600">{selectPost.author}</Text>
               </HStack>
             </VStack>
           </Box>
