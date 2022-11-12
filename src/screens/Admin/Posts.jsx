@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from "react";
 import {ScrollView} from 'react-native';
 import MainLayout from '../../components/MainLayout';
 import {
@@ -11,9 +11,17 @@ import {
   Stack,
   Text,
   Center,
-} from 'native-base';
+  Badge,
+  IconButton, useDisclose,
+} from "native-base";
+import myArticles from '../Article/MyArticles';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import article from "../Article/Article";
 
 const Posts = ({navigation}) => {
+  const [selected, setSelected] = useState();
+  const {isOpen, onOpen, onClose} = useDisclose();
+  let articles;
   return (
     <MainLayout>
       <ScrollView
@@ -61,6 +69,72 @@ const Posts = ({navigation}) => {
             </Box>
           </Pressable>
         </Box>
+
+        {articles.map(articles => (
+          <Pressable
+            key={article._id}
+          onPress={() =>
+            navigation.navigate({
+              name: '',
+              params: {},
+            })
+          }>
+
+          </Pressable>
+        ))}
+        {/*{articles &&*/}
+        {/*  articles.map(article => (*/}
+        {/*    <Box*/}
+        {/*      key={article._id}*/}
+        {/*      backgroundColor="#fff"*/}
+        {/*      p={3}*/}
+        {/*      my={1}*/}
+        {/*      mx={2}*/}
+        {/*      rounded="lg">*/}
+        {/*      <Pressable*/}
+        {/*        onPress={() =>*/}
+        {/*          navigation.navigate('Article', {article: article})*/}
+        {/*        }>*/}
+        {/*        <Stack space={3}>*/}
+        {/*          <HStack justifyContent="space-between" alignItmes="center">*/}
+        {/*            <Badge*/}
+        {/*              variant={'solid'}*/}
+        {/*              colorScheme={*/}
+        {/*                article.status === 'Declined'*/}
+        {/*                  ? 'error'*/}
+        {/*                  : article.status === 'Pending'*/}
+        {/*                  ? 'info'*/}
+        {/*                  : article.status === 'Approved'*/}
+        {/*                  ? 'teal'*/}
+        {/*                  : 'Default'*/}
+        {/*              }>*/}
+        {/*              {article.status}*/}
+        {/*            </Badge>*/}
+        {/*            <IconButton*/}
+        {/*              position="absolute"*/}
+        {/*              right={-10}*/}
+        {/*              top={-8}*/}
+        {/*              _icon={{*/}
+        {/*                as: MaterialCommunityIcons,*/}
+        {/*                name: 'dots-vertical',*/}
+        {/*                color: '#000',*/}
+        {/*                size: 'lg',*/}
+        {/*              }}*/}
+        {/*              onPress={() => {*/}
+        {/*                setSelected(article);*/}
+        {/*                onOpen();*/}
+        {/*              }}*/}
+        {/*            />*/}
+        {/*          </HStack>*/}
+        {/*          <Box>*/}
+        {/*            <Text fontSize={18} fontWeight="bold">*/}
+        {/*              {article.title}*/}
+        {/*            </Text>*/}
+        {/*          </Box>*/}
+        {/*        </Stack>*/}
+        {/*      </Pressable>*/}
+        {/*    </Box>*/}
+        {/*  ))}*/}
       </ScrollView>
     </MainLayout>
   );

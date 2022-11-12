@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import MainLayout from '../../components/MainLayout';
 import {
   AspectRatio,
@@ -10,10 +10,35 @@ import {
   Center,
   HStack,
   Button,
+  useToast,
 } from 'native-base';
 import {StyleSheet} from 'react-native';
+import useRequest from '../../services/RequestContext';
 
 const ViewPost = ({route}) => {
+  const [articles, setArticles] = useState();
+  const [loading, setLoading] = useState(false);
+  const {request} = useRequest();
+  const toast = useToast();
+
+  const getArticles = useCallback(async () => {
+    setLoading(true);
+    try {
+      const res = await request.get('Articles');
+      if (res.status === 200) {
+        setArticles(res.data.data);
+      }
+    } catch (e) {
+      console.log('error', e);
+    } finally {
+      setLoading(false);
+    }
+  }, [request]);
+
+  useEffect(() => {
+    getArticles().catch(console.error);
+  }, [getArticles]);
+
   return (
     <MainLayout>
       <ScrollView>
