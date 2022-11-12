@@ -51,7 +51,10 @@ const AdminDashboard = ({navigation}) => {
               </Box>
             </Box>
           </Pressable>
-          <Pressable onPress={() => navigation.navigate('ViewAdmin')}>
+          <Pressable
+            onPress={() =>
+              navigation.navigate('ViewAdmin', {edit: false, deleteX: false})
+            }>
             <Box m={4} rounded="lg" overflow="hidden" backgroundColor="#fff">
               <Box>
                 <AspectRatio w="100%" ratio={16 / 9}>
@@ -67,7 +70,12 @@ const AdminDashboard = ({navigation}) => {
                 <Button
                   _text={{fontWeight: 'bold', fontSize: '18'}}
                   style={styles.adminBtn}
-                  onPress={() => navigation.navigate('ViewAdmin')}>
+                  onPress={() =>
+                    navigation.navigate('ViewAdmin', {
+                      edit: false,
+                      deleteX: false,
+                    })
+                  }>
                   View Admin
                 </Button>
               </Box>
