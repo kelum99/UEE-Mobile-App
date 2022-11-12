@@ -15,7 +15,7 @@ import {
 } from 'native-base';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import useRequest from '../../services/RequestContext';
-import {Alert} from 'react-native';
+import {Alert, ScrollView} from 'react-native';
 
 const MyArticles = ({navigation}) => {
   const [articles, setArticles] = useState();
@@ -109,63 +109,67 @@ const MyArticles = ({navigation}) => {
         </Box>
       ) : (
         <>
-          {articles &&
-            articles.map(article => (
-              <Box
-                key={article._id}
-                backgroundColor="#fff"
-                p={3}
-                my={1}
-                mx={2}
-                rounded="lg">
-                <Pressable
-                  onPress={() =>
-                    navigation.navigate('Article', {article: article})
-                  }>
-                  <Stack space={3}>
-                    <HStack justifyContent="space-between" alignItmes="center">
-                      <Badge
-                        variant={'solid'}
-                        colorScheme={
-                          article.status === 'Declined'
-                            ? 'error'
-                            : article.status === 'Published'
-                            ? 'success'
-                            : article.status === 'Pending'
-                            ? 'info'
-                            : article.status === 'Unpublished'
-                            ? 'warning'
-                            : article.status === 'Approved'
-                            ? 'teal'
-                            : 'Default'
-                        }>
-                        {article.status}
-                      </Badge>
-                      <IconButton
-                        position="absolute"
-                        right={-10}
-                        top={-8}
-                        _icon={{
-                          as: MaterialCommunityIcons,
-                          name: 'dots-vertical',
-                          color: '#000',
-                          size: 'lg',
-                        }}
-                        onPress={() => {
-                          setSelected(article);
-                          onOpen();
-                        }}
-                      />
-                    </HStack>
-                    <Box>
-                      <Text fontSize={18} fontWeight="bold">
-                        {article.title}
-                      </Text>
-                    </Box>
-                  </Stack>
-                </Pressable>
-              </Box>
-            ))}
+          <ScrollView style={{flex: 1}}>
+            {articles &&
+              articles.map(article => (
+                <Box
+                  key={article._id}
+                  backgroundColor="#fff"
+                  p={3}
+                  my={1}
+                  mx={2}
+                  rounded="lg">
+                  <Pressable
+                    onPress={() =>
+                      navigation.navigate('Article', {article: article})
+                    }>
+                    <Stack space={3}>
+                      <HStack
+                        justifyContent="space-between"
+                        alignItmes="center">
+                        <Badge
+                          variant={'solid'}
+                          colorScheme={
+                            article.status === 'Declined'
+                              ? 'error'
+                              : article.status === 'Published'
+                              ? 'success'
+                              : article.status === 'Pending'
+                              ? 'info'
+                              : article.status === 'Unpublished'
+                              ? 'warning'
+                              : article.status === 'Approved'
+                              ? 'teal'
+                              : 'Default'
+                          }>
+                          {article.status}
+                        </Badge>
+                        <IconButton
+                          position="absolute"
+                          right={-10}
+                          top={-8}
+                          _icon={{
+                            as: MaterialCommunityIcons,
+                            name: 'dots-vertical',
+                            color: '#000',
+                            size: 'lg',
+                          }}
+                          onPress={() => {
+                            setSelected(article);
+                            onOpen();
+                          }}
+                        />
+                      </HStack>
+                      <Box>
+                        <Text fontSize={18} fontWeight="bold">
+                          {article.title}
+                        </Text>
+                      </Box>
+                    </Stack>
+                  </Pressable>
+                </Box>
+              ))}
+          </ScrollView>
         </>
       )}
 

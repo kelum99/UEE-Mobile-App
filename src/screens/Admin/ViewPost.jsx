@@ -10,15 +10,17 @@ import {
   Center,
   HStack,
   Button,
+  useToast,
 } from 'native-base';
 import {StyleSheet} from 'react-native';
 import useRequest from '../../services/RequestContext';
 import moment from 'moment';
 
-const ViewPost = ({route}) => {
+const ViewPost = ({route, navigation}) => {
   const [post, setPost] = useState({});
   const {request} = useRequest();
   const {selectPost} = route.params;
+  const toast = useToast();
   const getPost = async () => {
     try {
       const res = await request.get(`Articles/${selectPost._id}`);
@@ -32,6 +34,31 @@ const ViewPost = ({route}) => {
   useEffect(() => {
     getPost();
   });
+
+  const updateStatus = async status => {
+    const res = await request.patch(`Articles/status/${selectPost._id}`, {
+      status: status,
+    });
+    if (res.status === 200) {
+      toast.show({
+        render: () => {
+          return (
+            <Box
+              _text={{color: '#fff'}}
+              bg="emerald.500"
+              px="2"
+              py="1"
+              rounded="sm"
+              mb={5}>
+              {'Article ' + status + ' !'}
+            </Box>
+          );
+        },
+        placement: 'top',
+      });
+      navigation.navigate('Posts', {edit: true});
+    }
+  };
 
   return (
     <MainLayout>
@@ -71,6 +98,7 @@ const ViewPost = ({route}) => {
         </Box>
         <HStack style={{justifyContent: 'center'}}>
           <Button
+            onPress={() => updateStatus('Approved')}
             style={styles.btn}
             mt="5"
             backgroundColor="#091540"
@@ -78,6 +106,7 @@ const ViewPost = ({route}) => {
             Accept
           </Button>
           <Button
+            onPress={() => updateStatus('Declined')}
             style={styles.btn}
             mt="5"
             backgroundColor="#c21313"
