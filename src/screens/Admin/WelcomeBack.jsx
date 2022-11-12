@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {ScrollView, StyleSheet} from 'react-native';
 import MainLayout from '../../components/MainLayout';
 import {
@@ -9,9 +9,87 @@ import {
   Heading,
   Image,
   Input,
+  useToast,
+  Alert,
+  Text,
 } from 'native-base';
 
 const WelcomeBack = ({navigation}) => {
+  const [formData, setFormData] = useState({userName: '', password: ''});
+  // const {user} = route.params;
+  const toast = useToast();
+
+  const admin = {
+    userName: 'Saman',
+    password: 'saman123',
+  };
+  const user = {
+    userName: 'Nimal',
+    password: 'nimal123',
+  };
+
+  const login = () => {
+    if (
+      admin.userName === formData.userName &&
+      admin.password === formData.password
+    ) {
+      toast.show({
+        render: () => {
+          return (
+            <Alert justifyContent="center" status="success" variant="solid">
+              <Text color="white" fontWeight="medium">
+                Login Success!
+              </Text>
+            </Alert>
+          );
+        },
+        duration: 2000,
+        placement: 'top',
+      });
+      // navigation.navigate('AdminDashboard');
+      // navigation.reset({
+      //   index: 0,
+      //   routes: [{name: 'AdminDashboard'}],
+      // });
+    } else if (
+      user.userName === formData.userName &&
+      user.password === formData.password
+    ) {
+      toast.show({
+        render: () => {
+          return (
+            <Alert justifyContent="center" status="success" variant="solid">
+              <Text color="white" fontWeight="medium">
+                Login Success!
+              </Text>
+            </Alert>
+          );
+        },
+        duration: 2000,
+        placement: 'top',
+      });
+      //navigation.navigate('NewsFeed');
+      navigation.reset({
+        index: 0,
+        routes: [{name: 'NewsFeed'}],
+      });
+    } else {
+      toast.show({
+        render: () => {
+          return (
+            <Alert justifyContent="center" status="error" variant="solid">
+              <Text color="white" fontWeight="medium">
+                Login Faild! Try Again!
+              </Text>
+            </Alert>
+          );
+        },
+        duration: 2000,
+        placement: 'top',
+      });
+    }
+  };
+
   return (
     <MainLayout>
       <ScrollView
@@ -31,7 +109,7 @@ const WelcomeBack = ({navigation}) => {
           </AspectRatio>
         </Box>
         <Heading color="#fff" style={styles.title}>
-          Welcome Back !
+          Login !
         </Heading>
         <Box>
           <FormControl isRequired my={2}>
@@ -39,16 +117,27 @@ const WelcomeBack = ({navigation}) => {
               _text={{fontWeight: 'bold', fontSize: 18, color: '#fff'}}>
               Email
             </FormControl.Label>
-            <Input fontSize={14} width="350" variant="underlined" />
+            <Input
+              fontSize={14}
+              width="350"
+              variant="underlined"
+              onChangeText={text => setFormData({...formData, userName: text})}
+            />
           </FormControl>
           <FormControl isRequired my={2}>
             <FormControl.Label
               _text={{fontWeight: 'bold', fontSize: 18, color: '#fff'}}>
               Password
             </FormControl.Label>
-            <Input fontSize={14} width="350" variant="underlined" />
+            <Input
+              fontSize={14}
+              width="350"
+              variant="underlined"
+              onChangeText={text => setFormData({...formData, password: text})}
+            />
           </FormControl>
           <Button
+            onPress={login}
             borderRadius="full"
             mt="5"
             backgroundColor="#091540"
